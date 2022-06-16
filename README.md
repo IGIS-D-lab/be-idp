@@ -1,5 +1,13 @@
 # IGIS WebApp BackEnd Service
 
+```
+go mod init IGISBackEnd
+go get -u "github.com/gorilla/mux"
+go get -u "github.com/go-sql-driver/mysql"
+	
+
+```
+
 ## v1 api
 <p>
 
