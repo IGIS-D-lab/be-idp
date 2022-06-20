@@ -11,17 +11,17 @@ import (
 func MntData() IDPDataSet {
 	assetData, err := mntAsset()
 	if err != nil {
-		log.Panicln("Checklist :: Panic :: ", err)
+		log.Panicln(DATA_PANIC_ASSET, err)
 	}
 
 	debtData, err := mntDebt()
 	if err != nil {
-		log.Panicln("Debt :: Panic :: ", err)
+		log.Panicln(DATA_PANIC_DEBT, err)
 	}
 
 	macroData, err := mntMacro()
 	if err != nil {
-		log.Panicln("Macro :: Panic :: ", err)
+		log.Panicln(DATA_PANIC_MACRO, err)
 	}
 
 	return IDPDataSet{
@@ -34,9 +34,9 @@ func MntData() IDPDataSet {
 func mntAsset() (IDPAsset, error) {
 	file, err := os.Open("./asset/idpChecklist.json")
 	if err != nil {
-		log.Println("Checklist :: Err :: ", err)
+		log.Println(DATA_ERR_ASSET, err)
 	} else {
-		log.Println("Checklist :: Successfully opened")
+		log.Println(MSG_ASSET, "Successfully opened")
 	}
 
 	byteVal, _ := ioutil.ReadAll(file)
@@ -45,7 +45,7 @@ func mntAsset() (IDPAsset, error) {
 	var data IDPAsset
 	err = json.Unmarshal(byteVal, &data)
 	if err != nil {
-		log.Println("Asset :: Err :: ", err)
+		log.Println(DATA_ERR_ASSET, err)
 		return data, err
 	} else {
 		return data, nil
@@ -55,9 +55,9 @@ func mntAsset() (IDPAsset, error) {
 func mntDebt() (IDPDebt, error) {
 	file, err := os.Open("./asset/idpDebt.json")
 	if err != nil {
-		log.Println("Debt :: Err :: ", err)
+		log.Println(DATA_ERR_DEBT, err)
 	} else {
-		log.Println("Debt :: Successfully opened")
+		log.Println(MSG_DEBT, "Successfully opened")
 	}
 
 	byteVal, _ := ioutil.ReadAll(file)
@@ -66,7 +66,7 @@ func mntDebt() (IDPDebt, error) {
 	var data IDPDebt
 	err = json.Unmarshal(byteVal, &data)
 	if err != nil {
-		log.Println("Debt :: Err :: ", err)
+		log.Println(DATA_ERR_DEBT, err)
 		return data, err
 	} else {
 		return data, nil
@@ -76,9 +76,9 @@ func mntDebt() (IDPDebt, error) {
 func mntMacro() (IDPMacro, error) {
 	file, err := os.Open("./asset/idpMacro.json")
 	if err != nil {
-		log.Println("Macro :: Err :: ", err)
+		log.Println(DATA_ERR_MACRO, err)
 	} else {
-		log.Println("Macro :: Successfully opened")
+		log.Println(MSG_MACRO, "Successfully opened")
 	}
 	byteVal, _ := ioutil.ReadAll(file)
 	byteVal = bytes.Replace(byteVal, []byte(": NaN"), []byte(":null"), -1)
@@ -87,7 +87,7 @@ func mntMacro() (IDPMacro, error) {
 	var data IDPMacro
 	err = json.Unmarshal(byteVal, &data)
 	if err != nil {
-		log.Println("Macro :: Err :: ", err)
+		log.Println(DATA_ERR_MACRO, err)
 		return data, err
 	} else {
 		return data, nil

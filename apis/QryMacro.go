@@ -14,11 +14,11 @@ func ServeMacroWhole(d IDPMacro, w http.ResponseWriter, r *http.Request) {
 	// process year slider
 	yearFrom, err := strconv.Atoi(params["yearFrom"])
 	if err != nil {
-		log.Println("QryDebt :: yearFrom not integer")
+		log.Println("QryMacro :: yearFrom not integer")
 	}
 	yearUntil, err := strconv.Atoi(params["yearUntil"])
 	if err != nil {
-		log.Println("QryDebt :: yearUntil not integer")
+		log.Println("QryMacro :: yearUntil not integer")
 	}
 	searchComm := params["commodity"]
 	qry := ReqIDPMacro{

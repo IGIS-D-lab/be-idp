@@ -12,10 +12,10 @@ import (
 
 func init() {
 	log.Println("IGIS IDP Platform Backend Starting at http://127.0.0.1:8080")
-	log.Println("RowCountTest: http://localhost:8080/api/v1/debtRowCount?yearFrom=2000&yearUntil=2021&aumFrom=1&aumUntil=100000000000&debtFrom=1&debtUntil=1000000000000")
-	log.Println("AssetTest: http://localhost:8080/api/v1/asset?strat=Core")
-	log.Println("DebtTest: http://localhost:8080/api/v1/debt?yearFrom=2010&yearUntil=2020")
-	log.Println("MacroTest: http://localhost:8080/api/v1/macro?commodity=kr1y&yearFrom=2010&yearUntil=2020")
+	log.Println("RowCountTest: ", apis.TEST_URL_ROW)
+	log.Println("AssetTest: ", apis.TEST_URL_ASSET)
+	log.Println("DebtTest: ", apis.TEST_URL_DEBT)
+	log.Println("MacroTest: ", apis.TEST_URL_MACRO)
 }
 
 func main() {

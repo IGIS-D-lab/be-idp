@@ -16,28 +16,28 @@ func ServeDebtRowCount(d IDPDebt, w http.ResponseWriter, r *http.Request) {
 	// process parameters
 	yearFrom, err := strconv.Atoi(params["yearFrom"])
 	if err != nil {
-		log.Println("yearFrom not integer")
+		log.Println("QryRowCount :: yearFrom not integer")
 	}
 	yearUntil, err := strconv.Atoi(params["yearUntil"])
 	if err != nil {
-		log.Println("yearUntil not integer")
+		log.Println("QryRowCount :: yearUntil not integer")
 	}
 	err = verifyRowCountYear(yearFrom, yearUntil)
 	aumFrom, err := strconv.ParseFloat(params["aumFrom"], 64)
 	if err != nil {
-		log.Println("aumFrom not float64", params["aumFrom"])
+		log.Println("QryRowCount :: aumFrom not float64", params["aumFrom"])
 	}
 	aumUntil, err := strconv.ParseFloat(params["aumUntil"], 64)
 	if err != nil {
-		log.Println("aumUntil not float64", params["aumUntil"])
+		log.Println("QryRowCount :: aumUntil not float64", params["aumUntil"])
 	}
 	debtFrom, err := strconv.ParseFloat(params["debtFrom"], 64)
 	if err != nil {
-		log.Println("debtFrom not float64")
+		log.Println("QryRowCount :: debtFrom not float64")
 	}
 	debtUntil, err := strconv.ParseFloat(params["debtUntil"], 64)
 	if err != nil {
-		log.Println("debtUntil not float64")
+		log.Println("QryRowCount :: debtUntil not float64")
 	}
 	qry := ReqRowCount{
 		YearFrom:  yearFrom,
@@ -61,7 +61,7 @@ func verifyRowCountYear(yearFrom, yearUntil int) error {
 	if yearFrom <= yearUntil {
 		return nil
 	} else {
-		return errors.New("yearFrom is bigger than yearUntil")
+		return errors.New("QryRowCount :: yearFrom is bigger than yearUntil")
 	}
 }
 

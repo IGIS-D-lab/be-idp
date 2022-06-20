@@ -64,9 +64,7 @@
 
 <p>
 
-Create swagger API document
-- swagger logs instance by analyzing the formatted annotation
-- add annotation to each handleFuncs
+Changes to functions, simplify functions by splitting them.
 
 </p>
 
