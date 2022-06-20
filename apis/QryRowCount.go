@@ -13,7 +13,7 @@ import (
 
 func ServeDebtRowCount(d IDPDebt, w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
-	// process year slider
+	// process parameters
 	yearFrom, err := strconv.Atoi(params["yearFrom"])
 	if err != nil {
 		log.Println("yearFrom not integer")
@@ -23,34 +23,37 @@ func ServeDebtRowCount(d IDPDebt, w http.ResponseWriter, r *http.Request) {
 		log.Println("yearUntil not integer")
 	}
 	err = verifyRowCountYear(yearFrom, yearUntil)
-
-	// process AUM slider
-	aumFrom, err := strconv.Atoi(params["aumFrom"])
+	aumFrom, err := strconv.ParseFloat(params["aumFrom"], 64)
 	if err != nil {
-		log.Println("aumFrom not integer", params["aumFrom"])
+		log.Println("aumFrom not float64", params["aumFrom"])
 	}
-	aumUntil, err := strconv.Atoi(params["aumUntil"])
+	aumUntil, err := strconv.ParseFloat(params["aumUntil"], 64)
 	if err != nil {
-		log.Println("aumUntil not integer", params["aumUntil"])
+		log.Println("aumUntil not float64", params["aumUntil"])
 	}
-
-	// process Debt slider
-	debtFrom, err := strconv.Atoi(params["debtFrom"])
+	debtFrom, err := strconv.ParseFloat(params["debtFrom"], 64)
 	if err != nil {
-		log.Println("debtFrom not integer")
+		log.Println("debtFrom not float64")
 	}
-	debtUntil, err := strconv.Atoi(params["debtUntil"])
+	debtUntil, err := strconv.ParseFloat(params["debtUntil"], 64)
 	if err != nil {
-		log.Println("debtUntil not integer")
+		log.Println("debtUntil not float64")
+	}
+	qry := ReqRowCount{
+		YearFrom:  yearFrom,
+		YearUntil: yearUntil,
+		AumFrom:   aumFrom,
+		AumUntil:  aumUntil,
+		DebtFrom:  debtFrom,
+		DebtUntil: debtUntil,
 	}
 
 	sendPacket := IDPRowCount{
-		RowCount: debtRowCount(d, yearFrom, yearUntil, aumFrom, aumUntil, debtFrom, debtUntil),
+		RowCount: procRowCountQry(d, qry),
 	}
 	packet, _ := json.Marshal(sendPacket)
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-type", "application/json")
-	// mount json
 	w.Write(packet)
 }
 
@@ -72,15 +75,16 @@ func isWithIn(s, e int, val string) bool {
 	}
 }
 
-func debtRowCount(d IDPDebt, yearFrom, yearUntil, aumFrom, aumUntil, debtFrom, debtUntil int) int {
+func procRowCountQry(d IDPDebt, rq ReqRowCount) int {
 	// inclusive sum
 	var rowCount = 0
-
+	aumFromInt, aumUntilInt := int(rq.AumFrom), int(rq.AumUntil)
+	debtFromInt, debtUntilInt := int(rq.DebtFrom), int(rq.DebtUntil)
 	for _, row := range d.Data {
 		var (
-			cndYear = isWithIn(yearFrom, yearUntil, row.LoanDate[:4])
-			cndAUM  = isWithIn(aumFrom, aumUntil, row.AUMTotal)
-			cndDebt = isWithIn(debtFrom, debtUntil, row.LoanAmount)
+			cndYear = isWithIn(rq.YearFrom, rq.YearUntil, row.LoanDate[:4])
+			cndAUM  = isWithIn(aumFromInt, aumUntilInt, row.AUMTotal)
+			cndDebt = isWithIn(debtFromInt, debtUntilInt, row.LoanAmount)
 		)
 
 		if cndYear && cndAUM && cndDebt {

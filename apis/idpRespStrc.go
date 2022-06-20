@@ -1,14 +1,11 @@
 package apis
 
+// response IDPRowCount
 type IDPRowCount struct {
 	RowCount int `json:"rc"`
 }
-type IDPDataSet struct {
-	Asset IDPAsset
-	Debt  IDPDebt
-	Macro IDPMacro
-}
 
+// response IDPAsset
 type IDPAsset struct {
 	FromSheet  string   `json:"fsht"`
 	Desc       string   `json:"desc"`
@@ -16,6 +13,7 @@ type IDPAsset struct {
 	Data       []assets `json:"data"`
 }
 
+// response IDPDebt
 type IDPDebt struct {
 	FromSheet  string  `json:"fsht"`
 	Desc       string  `json:"desc"`
@@ -23,6 +21,7 @@ type IDPDebt struct {
 	Data       []debts `json:"data"`
 }
 
+// response IDPMacro
 type IDPMacro struct {
 	FromSheet  string `json:"fsht"`
 	Desc       string `json:"desc"`
@@ -30,6 +29,7 @@ type IDPMacro struct {
 	Data       macros `json:"data"`
 }
 
+// model assets
 type assets struct {
 	Universe        int8   `json:"univ"`
 	FundCode        string `json:"fc"`
@@ -46,6 +46,7 @@ type assets struct {
 	Miscellaneous   string `json:"misc"`
 }
 
+// model debts
 type debts struct {
 	FundCode             string `json:"fc"`
 	FundName             string `json:"fn"`
@@ -103,6 +104,7 @@ type debts struct {
 	Duration             string `json:"duration"`
 }
 
+// model macros
 type macros struct {
 	KR1Y      []macroRow `json:"kr1y"`
 	KR3Y      []macroRow `json:"kr3y"`
@@ -113,6 +115,7 @@ type macros struct {
 	KORIBOR3M []macroRow `json:"koribor3m"`
 }
 
+// model macroRow
 type macroRow struct {
 	Date  string  `json:"date"`
 	Value float32 `json:"value"`

@@ -37,10 +37,10 @@ func main() {
 		Queries(
 			"yearFrom", "{yearFrom:[0-9]+}",
 			"yearUntil", "{yearUntil:[0-9]+}",
-			"aumFrom", "{aumFrom:[0-9]+}",
-			"aumUntil", "{aumUntil:[0-9]+}",
-			"debtFrom", "{debtFrom:[0-9]+}",
-			"debtUntil", "{debtUntil:[0-9]+}",
+			"aumFrom", "{aumFrom}",
+			"aumUntil", "{aumUntil}",
+			"debtFrom", "{debtFrom}",
+			"debtUntil", "{debtUntil}",
 		)
 	sV1.HandleFunc("/asset", func(w http.ResponseWriter, r *http.Request) {
 		apis.ServeAssetWhole(d.Asset, w, r)

@@ -21,63 +21,34 @@ func ServeMacroWhole(d IDPMacro, w http.ResponseWriter, r *http.Request) {
 		log.Println("QryDebt :: yearUntil not integer")
 	}
 	searchComm := params["commodity"]
-
-	var sendPacket = []macroRow{}
-	switch {
-	case searchComm == "kr1y":
-		for _, row := range d.Data.KR1Y {
-			y, _ := strconv.Atoi(row.Date[:4])
-			if (y >= yearFrom) && (y <= yearUntil) {
-				sendPacket = append(sendPacket, row)
-			}
-		}
-	case searchComm == "kr3y":
-		for _, row := range d.Data.KR3Y {
-			y, _ := strconv.Atoi(row.Date[:4])
-			if (y >= yearFrom) && (y <= yearUntil) {
-				sendPacket = append(sendPacket, row)
-			}
-		}
-	case searchComm == "kr5y":
-		for _, row := range d.Data.KR5Y {
-			y, _ := strconv.Atoi(row.Date[:4])
-			if (y >= yearFrom) && (y <= yearUntil) {
-				sendPacket = append(sendPacket, row)
-			}
-		}
-	case searchComm == "ifd1y":
-		for _, row := range d.Data.IFD1Y {
-			y, _ := strconv.Atoi(row.Date[:4])
-			if (y >= yearFrom) && (y <= yearUntil) {
-				sendPacket = append(sendPacket, row)
-			}
-		}
-	case searchComm == "cd91d":
-		for _, row := range d.Data.CD91D {
-			y, _ := strconv.Atoi(row.Date[:4])
-			if (y >= yearFrom) && (y <= yearUntil) {
-				sendPacket = append(sendPacket, row)
-			}
-		}
-	case searchComm == "cp91d":
-		for _, row := range d.Data.CP91D {
-			y, _ := strconv.Atoi(row.Date[:4])
-			if (y >= yearFrom) && (y <= yearUntil) {
-				sendPacket = append(sendPacket, row)
-			}
-		}
-	case searchComm == "koribor3m":
-		for _, row := range d.Data.KORIBOR3M {
-			y, _ := strconv.Atoi(row.Date[:4])
-			if (y >= yearFrom) && (y <= yearUntil) {
-				sendPacket = append(sendPacket, row)
-			}
-		}
+	qry := ReqIDPMacro{
+		Commodity: searchComm,
+		YearFrom:  yearFrom,
+		YearUntil: yearUntil,
 	}
 
-	packet, _ := json.Marshal(sendPacket)
+	packet, _ := json.Marshal(serveMacroQry(qry, d))
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-type", "application/json")
-	// mount json
 	w.Write(packet)
+}
+
+func serveMacroQry(rq ReqIDPMacro, d IDPMacro) []macroRow {
+	dMap := map[string][]macroRow{
+		"kr1y":      d.Data.KR1Y,
+		"kr3y":      d.Data.KR3Y,
+		"kr5y":      d.Data.KR5Y,
+		"ifd1y":     d.Data.IFD1Y,
+		"cd91d":     d.Data.CD91D,
+		"cp91d":     d.Data.CP91D,
+		"koribor3m": d.Data.KORIBOR3M,
+	}
+	var sendPacket = []macroRow{}
+	for _, row := range dMap[rq.Commodity] {
+		y, _ := strconv.Atoi(row.Date[:4])
+		if (y >= rq.YearFrom) && (y <= rq.YearUntil) {
+			sendPacket = append(sendPacket, row)
+		}
+	}
+	return sendPacket
 }

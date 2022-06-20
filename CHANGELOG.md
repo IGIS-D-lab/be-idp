@@ -59,3 +59,44 @@
 
 [Remove]
 
+
+# 0.1.1
+
+<p>
+
+Create swagger API document
+- swagger logs instance by analyzing the formatted annotation
+- add annotation to each handleFuncs
+
+</p>
+
+[Add]
+- annotations to all structures
+- ./apis
+  - meta.go: provide meta for swagger config
+  - idpReqStrc.go: records all structures that gathers params inside request body
+    - struct ReqRowCount
+    - struct ReqIDPAsset
+    - struct ReqIDPDebt
+    - struct ReqIDPMacro
+
+[Change]
+- ./apis
+  - QryDebt.go
+    - func ServeDebtWhole
+      - separate it with procDebtQry | serveDebtWhole for better maintainence
+  - QryAsset.go
+    - func ServeAssetWhole
+      - separate it with procAssetQry | serveAssetWhole
+  - QryRowCount.go
+    - rename func debtRowCount -> func procRowCountQry
+    - change procRowCountQry parameters to take ReqRowCount struct
+  - QryMacro.go
+    - func ServeMacroWhole
+      - separate it with procMacroQry | ServeMacroWhole
+      - simplify switch-case grammar with hashmap
+
+
+[Fix]
+
+[Remove]
