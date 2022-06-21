@@ -2,7 +2,6 @@ package apis
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -10,18 +9,21 @@ import (
 
 func ServeAssetWhole(d IDPAsset, w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
-	// process parameters
-	// s in ["All", "Core", "Value-added", "Opportunistic"]
-	s := params["strat"]
-	log.Println("Serve asset(checklist) where strategy is ", s)
-	qry := ReqIDPAsset{
-		Strategy: s,
-	}
+	qry := procAssetParam(params)
 
 	packet, _ := json.Marshal(procAssetQry(qry, d))
+
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(packet)
+}
+
+func procAssetParam(m map[string]string) ReqIDPAsset {
+	// strat in ["All", "Core", "Value-added", "Opportunistic"]
+	q := ReqIDPAsset{
+		Strategy: m["strat"],
+	}
+	return q
 }
 
 func procAssetQry(rq ReqIDPAsset, d IDPAsset) []assets {

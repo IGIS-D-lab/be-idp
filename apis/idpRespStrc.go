@@ -1,10 +1,5 @@
 package apis
 
-// response IDPRowCount
-type IDPRowCount struct {
-	RowCount int `json:"rc"`
-}
-
 // response IDPAsset
 type IDPAsset struct {
 	FromSheet  string   `json:"fsht"`
@@ -18,6 +13,7 @@ type IDPDebt struct {
 	FromSheet  string  `json:"fsht"`
 	Desc       string  `json:"desc"`
 	LastUpdate string  `json:"last"`
+	RowCount   int     `json:"rC"`
 	Data       []debts `json:"data"`
 }
 

@@ -2,7 +2,6 @@ package apis
 
 import (
 	"encoding/json"
-	"log"
 	"net/http"
 	"strconv"
 
@@ -11,26 +10,27 @@ import (
 
 func ServeMacroWhole(d IDPMacro, w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
-	// process year slider
-	yearFrom, err := strconv.Atoi(params["yearFrom"])
-	if err != nil {
-		log.Println("QryMacro :: yearFrom not integer")
-	}
-	yearUntil, err := strconv.Atoi(params["yearUntil"])
-	if err != nil {
-		log.Println("QryMacro :: yearUntil not integer")
-	}
-	searchComm := params["commodity"]
-	qry := ReqIDPMacro{
-		Commodity: searchComm,
-		YearFrom:  yearFrom,
-		YearUntil: yearUntil,
-	}
+	qry := procMacroParam(params)
 
 	packet, _ := json.Marshal(serveMacroQry(qry, d))
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-type", "application/json")
 	w.Write(packet)
+}
+
+func procMacroParam(m map[string]string) ReqIDPMacro {
+	q := ReqIDPMacro{
+		YearFrom: func() int {
+			yf, _ := strconv.Atoi(m["yearFrom"])
+			return yf
+		}(),
+		YearUntil: func() int {
+			yu, _ := strconv.Atoi(m["yearUntil"])
+			return yu
+		}(),
+		Commodity: m["commodity"],
+	}
+	return q
 }
 
 func serveMacroQry(rq ReqIDPMacro, d IDPMacro) []macroRow {

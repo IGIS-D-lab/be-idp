@@ -3,6 +3,8 @@ package apis
 import (
 	"fmt"
 	"net/http"
+	"strconv"
+	"strings"
 )
 
 const (
@@ -30,4 +32,26 @@ const (
 
 func ServeLanding(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "IGIS Debt Platform landing page\n")
+}
+
+func IsWithInSlider(s, e int, val string) bool {
+	v := strings.Replace(val, ",", "", -1)
+	res, _ := strconv.Atoi(v)
+	if (res >= s) && (res <= e) {
+		return true
+	} else {
+		return false
+	}
+}
+
+func IsWithInChoice(isSame, val string) bool {
+	workString := strings.Replace(isSame, " ", "", -1)
+	workStringSlice := strings.Split(workString, "-")
+	result := false
+	for _, i := range workStringSlice {
+		if i == val {
+			result = true
+		}
+	}
+	return result
 }

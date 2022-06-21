@@ -30,18 +30,12 @@ func main() {
 
 	// api v1 subrouter
 	sV1 := r.PathPrefix("/api/v1").Subrouter()
-	sV1.HandleFunc("/debtRowCount", func(w http.ResponseWriter, r *http.Request) {
-		apis.ServeDebtRowCount(d.Debt, w, r)
-	}).
-		Methods("GET").
-		Queries(
-			"yearFrom", "{yearFrom:[0-9]+}",
-			"yearUntil", "{yearUntil:[0-9]+}",
-			"aumFrom", "{aumFrom}",
-			"aumUntil", "{aumUntil}",
-			"debtFrom", "{debtFrom}",
-			"debtUntil", "{debtUntil}",
-		)
+	sV1.Path("/debt").
+		HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			apis.ServeDebt(d.Debt, w, r)
+		}).
+		Name("ServeDebt")
+
 	sV1.HandleFunc("/asset", func(w http.ResponseWriter, r *http.Request) {
 		apis.ServeAssetWhole(d.Asset, w, r)
 	}).
@@ -49,14 +43,7 @@ func main() {
 		Queries(
 			"strat", "{strat}",
 		)
-	sV1.HandleFunc("/debt", func(w http.ResponseWriter, r *http.Request) {
-		apis.ServeDebtWhole(d.Debt, w, r)
-	}).
-		Methods("GET").
-		Queries(
-			"yearFrom", "{yearFrom:[0-9]+}",
-			"yearUntil", "{yearUntil:[0-9]+}",
-		)
+
 	sV1.HandleFunc("/macro", func(w http.ResponseWriter, r *http.Request) {
 		apis.ServeMacroWhole(d.Macro, w, r)
 	}).

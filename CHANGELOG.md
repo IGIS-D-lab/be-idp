@@ -98,3 +98,44 @@ Changes to functions, simplify functions by splitting them.
 [Fix]
 
 [Remove]
+
+
+# 0.2.0
+
+<p>
+insert proc*Param function. edit QryDebt.go, QryRowCount.go to fit new design.
+* Delete QryRowCount.go - integrated into QryDebt.go
+* Delete ReqIDPDebt Structure.
+* Enable Optional Queries to QryDebt - other Macro and Asset should follow
+</p>
+
+[Add]
+- ./apis
+  - idp.go
+    - func IsWithInSlider
+    - func IsWithInChoice - enables multi conditions linked by "-"
+
+
+[Change]
+- ./apis
+  - QryAsset.go, QryMacro.go
+    - func procAssetParam - separated from serveAssetWhole
+    - func procMacroParam - separated from serveMacroWhole
+  - Output of QryDebt changed from []debts -> IDPDebt struct
+
+[Fix]
+- ./apis
+  - QryDebt.go
+    - func ServeDebtWhole -> ServeDebt
+    - func procDebtQry - now supports optional queries.
+
+[Remove]
+- ./apis
+  - QryDebt.go
+    - func procDebtParam - integrated into procDebtQry to support optional queries
+  - QryRowCoung.go - the whole thing
+  - idpRespStrc.go
+    - struct IDPRowCount
+  - idpReqStrc.go
+    - struct ReqRowCount
+    - struct ReqIDPDebt - useless in processing optional queries
