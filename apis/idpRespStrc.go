@@ -1,6 +1,5 @@
 package apis
 
-// response IDPAsset
 type IDPAsset struct {
 	FromSheet  string   `json:"fsht"`
 	Desc       string   `json:"desc"`
@@ -8,16 +7,16 @@ type IDPAsset struct {
 	Data       []assets `json:"data"`
 }
 
-// response IDPDebt
 type IDPDebt struct {
-	FromSheet  string  `json:"fsht"`
-	Desc       string  `json:"desc"`
-	LastUpdate string  `json:"last"`
-	RowCount   int     `json:"rC"`
-	Data       []debts `json:"data"`
+	FromSheet      string            `json:"fsht"`
+	Desc           string            `json:"desc"`
+	LastUpdate     string            `json:"last"`
+	RowCount       int               `json:"rC"`
+	Data           []debts           `json:"data"`
+	DataGraphLeft  []debtsGraphLeft  `json:"datag1"`
+	DataGraphRight []debtsGraphRight `json:"datag2"`
 }
 
-// response IDPMacro
 type IDPMacro struct {
 	FromSheet  string `json:"fsht"`
 	Desc       string `json:"desc"`
@@ -25,7 +24,6 @@ type IDPMacro struct {
 	Data       macros `json:"data"`
 }
 
-// model assets
 type assets struct {
 	Universe        int8   `json:"univ"`
 	FundCode        string `json:"fc"`
@@ -42,7 +40,6 @@ type assets struct {
 	Miscellaneous   string `json:"misc"`
 }
 
-// model debts
 type debts struct {
 	FundCode             string `json:"fc"`
 	FundName             string `json:"fn"`
@@ -100,7 +97,19 @@ type debts struct {
 	Duration             string `json:"duration"`
 }
 
-// model macros
+type debtsGraphLeft struct {
+	SetDateRate string `json:"sdaterate"`
+	AssetType   string `json:"at"`
+	LoanDate    string `json:"loandate"`
+	LoanAmount  string `json:"loanamt"`
+}
+
+type debtsGraphRight struct {
+	LoanDate   string `json:"loandate"`
+	LoanAmount string `json:"loanamt"`
+	LPCorp     string `json:"lpcorp"`
+}
+
 type macros struct {
 	KR1Y      []macroRow `json:"kr1y"`
 	KR3Y      []macroRow `json:"kr3y"`
@@ -111,7 +120,6 @@ type macros struct {
 	KORIBOR3M []macroRow `json:"koribor3m"`
 }
 
-// model macroRow
 type macroRow struct {
 	Date  string  `json:"date"`
 	Value float32 `json:"value"`

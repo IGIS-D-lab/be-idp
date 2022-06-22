@@ -139,3 +139,26 @@ insert proc*Param function. edit QryDebt.go, QryRowCount.go to fit new design.
   - idpReqStrc.go
     - struct ReqRowCount
     - struct ReqIDPDebt - useless in processing optional queries
+
+
+# 0.2.1
+
+<p>
+add endpoint for graph 1 and graph 2.
+</p>
+
+[Add]
+
+[Change]
+- ./apis
+  - QryDebt.go
+    - func procDebtQry - add integer forGraph -> point out whether it's for datatable, graphleft, graphright.
+  - idpRespStrc.go
+    - type IDPDebt
+      - add DataGraphLeft, DataGraphRight Key
+    - type debtsGraphLeft
+    - type debtsGraphRight
+
+[Fix]
+
+[Remove]
