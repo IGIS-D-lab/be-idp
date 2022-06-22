@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"reflect"
 	"strconv"
 )
 
@@ -30,22 +31,37 @@ func ServeDebt(d IDPDebt, epType int, w http.ResponseWriter, r *http.Request) {
 	w.Write(packet)
 }
 
-func procDebtQry(v url.Values, d IDPDebt, forGraph int) ([]debts, []debtsGraphLeft, []debtsGraphRight) {
+func getFieldDebt(v *debts, field string) string {
+	r := reflect.ValueOf(v)
+	f := reflect.Indirect(r).FieldByName(field)
+	return f.String()
+}
 
-	// Queries
+func procDebtQry(v url.Values, d IDPDebt, forGraph int) ([]debts, []debtsGraphLeft, []debtsGraphRight) {
 	var (
+		// string parameters - data search
 		assetType = v.Get("at")
 		seniority = v.Get("seniorstr")
 		loanClass = v.Get("loancls")
-		debtFrom  = v.Get("debtFrom")
-		debtUntil = v.Get("debtUntil")
 		rate      = v.Get("rate")
 	)
-
-	// Conditions
-	var sendPacketDT = []debts{}
-	var sendPacketG1 = []debtsGraphLeft{}
-	var sendPacketG2 = []debtsGraphRight{}
+	var (
+		// float64 parameters - data search
+		debtFrom  = v.Get("debtFrom")
+		debtUntil = v.Get("debtUntil")
+	)
+	// TODO: create sorting
+	var (
+		_ = v.Get("sortOrd")
+		_ = v.Get("sorkKey")
+		_ = v.Get("pageCount")
+	)
+	var (
+		// conditions
+		sendPacketDT = []debts{}
+		sendPacketG1 = []debtsGraphLeft{}
+		sendPacketG2 = []debtsGraphRight{}
+	)
 
 	for _, row := range d.Data {
 		var (
@@ -78,6 +94,7 @@ func procDebtQry(v url.Values, d IDPDebt, forGraph int) ([]debts, []debtsGraphLe
 			switch forGraph {
 			case 0: // table
 				sendPacketDT = append(sendPacketDT, row)
+
 			case 1: // graph left
 				r := debtsGraphLeft{
 					SetDateRate: row.SetDateRate,
@@ -86,6 +103,7 @@ func procDebtQry(v url.Values, d IDPDebt, forGraph int) ([]debts, []debtsGraphLe
 					LoanAmount:  row.LoanAmount,
 				}
 				sendPacketG1 = append(sendPacketG1, r)
+
 			case 2: // graph right
 				r := debtsGraphRight{
 					LoanDate:   row.LoanDate,
