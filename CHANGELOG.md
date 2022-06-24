@@ -188,3 +188,26 @@ add endpoint & functions for single fund search
 [Fix]
 
 [Remove]
+
+# 0.3.2
+
+<p>
+add index for IDPDebt query json to sort out single fund
+</p>
+
+[Add]
+- ./asset
+  - idpDebt2.json
+
+[Change]
+- ./apis
+  - idpData.go
+    - func mntDebt - read from idpDebt2.json
+  - idpRespStrc.go
+    - struct debts - add field UniqueIndex
+  - QrySingle.go
+    - func procSingleQry
+      - var uniqIdx - gets from idx
+[Fix]
+
+[Remove]

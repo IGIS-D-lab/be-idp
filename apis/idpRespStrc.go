@@ -48,6 +48,7 @@ type assets struct {
 }
 
 type debts struct {
+	UniqueIndex          string `json:"idx"`
 	FundCode             string `json:"fc"`
 	FundName             string `json:"fn"`
 	SetDate              string `json:"sdate"`

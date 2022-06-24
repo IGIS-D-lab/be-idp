@@ -5,7 +5,6 @@ import (
 	"log"
 	"net/http"
 	"net/url"
-	"strings"
 )
 
 func ServeSingle(d IDPDebt, w http.ResponseWriter, r *http.Request) {
@@ -29,13 +28,13 @@ func ServeSingle(d IDPDebt, w http.ResponseWriter, r *http.Request) {
 func procSingleQry(v url.Values, d IDPDebt) debts {
 	var (
 		fundCode = v.Get("fc")
-		liqprov  = v.Get("lpcorp")
+		uniqIdx  = v.Get("idx")
 	)
 	var sendPacketSingle = debts{}
 
 	for _, row := range d.Data {
 		sameFundCode := row.FundCode == fundCode
-		sameLP := strings.Replace(row.LPCorp, " ", "", -1) == liqprov
+		sameLP := row.UniqueIndex == uniqIdx
 		if sameFundCode && sameLP {
 			sendPacketSingle = row
 			break
