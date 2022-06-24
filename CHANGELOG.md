@@ -211,3 +211,22 @@ add index for IDPDebt query json to sort out single fund
 [Fix]
 
 [Remove]
+
+# 0.3.3
+<p>
+add PageCount for IDPDebt query
+</p>
+
+[Add]
+- ./apis
+  - idp.go
+    - SINGLE_PAGE_INFO
+  - QryDebt.go
+    - func divDebtArray
+
+[Change]
+- ./apis
+  - idp.go - change TEST URL for Debt
+  - QryDebt.go
+    -  func procDebtQry - add new var pgn. return divided Debt Array
+      - var pgn takes value from 1 ~ ...

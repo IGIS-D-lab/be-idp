@@ -7,6 +7,8 @@ import (
 	"strings"
 )
 
+const SINGLE_PAGE_INFO = 10
+
 const (
 	DATA_PANIC_ASSET = "Checklist :: Panic :: "
 	DATA_PANIC_DEBT  = "Debt :: Panic :: "
@@ -26,7 +28,7 @@ const (
 
 const (
 	TEST_URL_ASSET  = "http://localhost:8080/api/v1/asset?strat=Core"
-	TEST_URL_DEBT   = "http://localhost:8080/api/v1/debt/dataTable?at=%EC%98%A4%ED%94%BC%EC%8A%A4&seniorstr=%EC%A4%91&loancls=%EB%B8%8C%EB%A6%BF%EC%A7%80&debtFrom=1&debtUntil=1e13&sortOrd=desc&sortKey=LoanDate"
+	TEST_URL_DEBT   = "http://localhost:8080/api/v1/debt/dataTable?at=%EC%98%A4%ED%94%BC%EC%8A%A4-%ED%98%B8%ED%85%94&seniorstr=%EC%84%A0&loancls=%EB%B8%8C%EB%A6%BF%EC%A7%80&debtFrom=1&debtUntil=1e13&pageCount=1"
 	TEST_URL_MACRO  = "http://localhost:8080/api/v1/macro?commodity=kr1y&yearFrom=2010&yearUntil=2020"
 	TEST_URL_SINGLE = "http://localhost:8080/api/v1/single?fc=112001&idx=1"
 )

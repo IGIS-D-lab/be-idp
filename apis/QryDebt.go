@@ -37,6 +37,20 @@ func getFieldDebt(v *debts, field string) string {
 	return f.String()
 }
 
+func divDebtArray(d []debts, pageNum string) []debts {
+	if pageNum == "" {
+		return d
+	}
+	p, _ := strconv.Atoi(pageNum)
+	s, e := SINGLE_PAGE_INFO*(p-1), SINGLE_PAGE_INFO*p
+	if e > len(d) {
+		return d[s:]
+	} else {
+		return d[s:e]
+	}
+
+}
+
 func procDebtQry(v url.Values, d IDPDebt, forGraph int) ([]debts, []debtsGraphLeft, []debtsGraphRight) {
 	var (
 		// string parameters - data search
@@ -52,9 +66,9 @@ func procDebtQry(v url.Values, d IDPDebt, forGraph int) ([]debts, []debtsGraphLe
 	)
 	// TODO: create sorting
 	var (
-		_ = v.Get("sortOrd")
-		_ = v.Get("sorkKey")
-		_ = v.Get("pageCount")
+		_   = v.Get("sortOrd")
+		_   = v.Get("sorkKey")
+		pgn = v.Get("pageCount")
 	)
 	var (
 		// conditions
@@ -114,5 +128,5 @@ func procDebtQry(v url.Values, d IDPDebt, forGraph int) ([]debts, []debtsGraphLe
 			}
 		}
 	}
-	return sendPacketDT, sendPacketG1, sendPacketG2
+	return divDebtArray(sendPacketDT, pgn), sendPacketG1, sendPacketG2
 }
