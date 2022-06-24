@@ -17,6 +17,13 @@ type IDPDebt struct {
 	DataGraphRight []debtsGraphRight `json:"datag2"`
 }
 
+type IDPSingle struct {
+	FromSheet  string `json:"fsht"`
+	Desc       string `json:"desc"`
+	LastUpdate string `json:"last"`
+	Data       debts  `json:"data"`
+}
+
 type IDPMacro struct {
 	FromSheet  string `json:"fsht"`
 	Desc       string `json:"desc"`

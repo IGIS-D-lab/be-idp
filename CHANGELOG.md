@@ -162,3 +162,29 @@ add endpoint for graph 1 and graph 2.
 [Fix]
 
 [Remove]
+
+
+# 0.2.2
+
+<p>
+add endpoint & functions for single fund search
+</p>
+
+[Add]
+- ./apis
+  - QrySingle.go
+    - func ServeSingle
+    - func procSingleQry
+  - idpRespStrc.go
+    - struct IDPSingle
+  - idp.go
+    - const TEST_URL_SINGLE, MSG_SINGLE
+
+[Change]
+- main.go
+  - add names, and specify methods for /dataTable, /graphRight, /graphLeft
+  - add /single endpoint
+
+[Fix]
+
+[Remove]

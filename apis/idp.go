@@ -18,16 +18,17 @@ const (
 )
 
 const (
-	MSG_ASSET = "Asset :: "
-	MSG_DEBT  = "Debt :: "
-	MSG_MACRO = "Macro :: "
+	MSG_ASSET  = "Asset :: "
+	MSG_DEBT   = "Debt :: "
+	MSG_MACRO  = "Macro :: "
+	MSG_SINGLE = "Single :: "
 )
 
 const (
-	TEST_URL_ROW   = "http://localhost:8080/api/v1/debtRowCount?yearFrom=2000&yearUntil=2021&aumFrom=1&aumUntil=100000000000&debtFrom=1&debtUntil=1000000000000"
-	TEST_URL_ASSET = "http://localhost:8080/api/v1/asset?strat=Core"
-	TEST_URL_DEBT  = "http://localhost:8080/api/v1/debt?yearFrom=2010&yearUntil=2020"
-	TEST_URL_MACRO = "http://localhost:8080/api/v1/macro?commodity=kr1y&yearFrom=2010&yearUntil=2020"
+	TEST_URL_ASSET  = "http://localhost:8080/api/v1/asset?strat=Core"
+	TEST_URL_DEBT   = "http://localhost:8080/api/v1/debt/dataTable?at=%EC%98%A4%ED%94%BC%EC%8A%A4&seniorstr=%EC%A4%91&loancls=%EB%B8%8C%EB%A6%BF%EC%A7%80&debtFrom=1&debtUntil=1e13&sortOrd=desc&sortKey=LoanDate"
+	TEST_URL_MACRO  = "http://localhost:8080/api/v1/macro?commodity=kr1y&yearFrom=2010&yearUntil=2020"
+	TEST_URL_SINGLE = "http://localhost:8080/api/v1/single?fc=112001&lpcorp=주식회사우리은행"
 )
 
 func ServeLanding(w http.ResponseWriter, r *http.Request) {
