@@ -53,7 +53,7 @@ func mntAsset() (IDPAsset, error) {
 }
 
 func mntDebt() (IDPDebt, error) {
-	file, err := os.Open("./asset/idpDebt2.json")
+	file, err := os.Open("./asset/idpDebt3.json")
 	if err != nil {
 		log.Println(DATA_ERR_DEBT, err)
 	} else {

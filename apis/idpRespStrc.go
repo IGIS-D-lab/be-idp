@@ -53,6 +53,7 @@ type debts struct {
 	FundName             string `json:"fn"`
 	SetDate              string `json:"sdate"`
 	MaturityDate         string `json:"mdate"`
+	Image                string `json:"img"`
 	AssetName            string `json:"an"`
 	AssetCount           string `json:"ac"`
 	DomesticForeign      string `json:"domfor"`

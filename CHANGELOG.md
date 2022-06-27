@@ -230,3 +230,26 @@ add PageCount for IDPDebt query
   - QryDebt.go
     -  func procDebtQry - add new var pgn. return divided Debt Array
       - var pgn takes value from 1 ~ ...
+
+[Fix]
+
+[Remove]
+
+# 0.3.4
+<p>
+add path to image
+</p>
+
+[Add]
+
+[Change]
+- ./apis
+  - idpData.go
+    - func mntDebt - use idpDebt3.json
+  - idpRespStrc.go
+    - struct debts - add Image field
+
+[Fix]
+
+[Remove]
+  
