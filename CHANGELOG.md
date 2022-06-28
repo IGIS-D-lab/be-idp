@@ -253,3 +253,19 @@ add path to image
 
 [Remove]
   
+
+# 0.3.5
+<p>
+add path to file location
+</p>
+
+[Add]
+
+[Change]
+- ./apis
+  - idpRespStrc.go
+    - struct debts - add file field
+
+[Fix]
+
+[Remove]

@@ -74,6 +74,7 @@ type debts struct {
 	LPType               string `json:"lpt"`
 	Seniority            string `json:"seniorstr"`
 	LoanUse              string `json:"loanuse"`
+	LoanType             string `json:"loantype"`
 	LoanClass            string `json:"loancls"`
 	Address              string `json:"addr"`
 	LoanAmount           string `json:"loanamt"`
@@ -104,6 +105,7 @@ type debts struct {
 	DebtUnderwrite       string `json:"debtundwrt"`
 	Builder              string `json:"builder"`
 	Duration             string `json:"duration"`
+	ContractFile         string `json:"file"`
 }
 
 type debtsGraphLeft struct {
