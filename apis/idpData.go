@@ -24,10 +24,15 @@ func MntData() IDPDataSet {
 		log.Panicln(DATA_PANIC_MACRO, err)
 	}
 
+	modelInfo := mntModelInfo()
+	modelCoef := mntModelCoef()
+
 	return IDPDataSet{
-		Asset: assetData,
-		Debt:  debtData,
-		Macro: macroData,
+		Asset:     assetData,
+		Debt:      debtData,
+		Macro:     macroData,
+		ModelInfo: modelInfo,
+		ModelCoef: modelCoef,
 	}
 }
 
@@ -74,7 +79,7 @@ func mntDebt() (IDPDebt, error) {
 }
 
 func mntMacro() (IDPMacro, error) {
-	file, err := os.Open("./asset/idpMacro.json")
+	file, err := os.Open("./asset/idpMacro2.json")
 	if err != nil {
 		log.Println(DATA_ERR_MACRO, err)
 	} else {
@@ -93,4 +98,30 @@ func mntMacro() (IDPMacro, error) {
 		return data, nil
 	}
 
+}
+
+func mntModelInfo() []byte {
+	file, err := os.Open("./asset/idpModelInfo.json")
+	if err != nil {
+		log.Println(DATA_ERR_MODEL, err)
+	} else {
+		log.Println(MSG_MODEL, "Successfully opened")
+	}
+	byteVal, _ := ioutil.ReadAll(file)
+	byteVal = bytes.Replace(byteVal, []byte(": NaN"), []byte(":null"), -1)
+
+	return byteVal
+}
+
+func mntModelCoef() []byte {
+	file, err := os.Open("./asset/idpCoef.json")
+	if err != nil {
+		log.Println(DATA_ERR_MODEL, err)
+	} else {
+		log.Println(MSG_MODEL, "Successfully opened")
+	}
+	byteVal, _ := ioutil.ReadAll(file)
+	byteVal = bytes.Replace(byteVal, []byte(": NaN"), []byte(":null"), -1)
+
+	return byteVal
 }

@@ -64,6 +64,13 @@ func procDebtQry(v url.Values, d IDPDebt, forGraph int) ([]debts, []debtsGraphLe
 		debtFrom  = v.Get("debtFrom")
 		debtUntil = v.Get("debtUntil")
 	)
+	_ = map[string]string{
+		"at":        assetType,
+		"seniorstr": seniority,
+		"loancls":   loanClass,
+		"rate":      rate,
+	} // fore middleware
+
 	// TODO: create sorting
 	var (
 		_   = v.Get("sortOrd")

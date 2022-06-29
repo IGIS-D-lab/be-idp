@@ -269,3 +269,31 @@ add path to file location
 [Fix]
 
 [Remove]
+
+# 0.3.6
+<p>
+add endpoint for api parameters. prepare logging middleware
+</p>
+
+[Add]
+- ./apis
+  - QryModel.go
+    - func ServeModelInfo
+    - func ServeModelCoef
+  - idp.go
+    - const DATA_PANIC_MODEL, DATA_ERR_MODEL, MSG_MODEL
+  - idpData.go
+    - func mntModelInfo
+    - func mntModelCoef
+- main.go - add endpoint
+  - /api/v1/model/info
+  - /api/v1/model/coef
+
+[Change]
+- ./apis
+  - QryDebt.go
+    - map[string]string prepare for middleware
+
+[Fix]
+
+[Remove]

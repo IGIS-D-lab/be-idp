@@ -19,6 +19,7 @@ func init() {
 }
 
 func main() {
+	// _, _ = logs.LogInit()
 	r := mux.NewRouter()
 
 	// Pre-load data
@@ -48,6 +49,21 @@ func main() {
 		}).
 		Methods("GET").
 		Name("debt.graphRight")
+
+	// api v1 subrouter - model
+	sV1Model := r.PathPrefix("/api/v1/model").Subrouter()
+	sV1Model.Path("/info").
+		HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			apis.ServeModelInfo(d.ModelInfo, w, r)
+		}).
+		Methods("GET").
+		Name("model information")
+	sV1Model.Path("/coef").
+		HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			apis.ServeModelCoef(d.ModelCoef, w, r)
+		}).
+		Methods("GET").
+		Name("model coefficients")
 
 	// api v1 subrouter all
 	sV1 := r.PathPrefix("/api/v1").Subrouter()

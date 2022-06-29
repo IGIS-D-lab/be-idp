@@ -13,10 +13,12 @@ const (
 	DATA_PANIC_ASSET = "Checklist :: Panic :: "
 	DATA_PANIC_DEBT  = "Debt :: Panic :: "
 	DATA_PANIC_MACRO = "Macro :: Panic :: "
+	DATA_PANIC_MODEL = "Model :: Panic :: "
 
 	DATA_ERR_ASSET = "Checklist :: Error :: "
 	DATA_ERR_DEBT  = "Debt :: Error :: "
 	DATA_ERR_MACRO = "Macro :: Error :: "
+	DATA_ERR_MODEL = "Model :: Error :: "
 )
 
 const (
@@ -24,6 +26,7 @@ const (
 	MSG_DEBT   = "Debt :: "
 	MSG_MACRO  = "Macro :: "
 	MSG_SINGLE = "Single :: "
+	MSG_MODEL  = "Model :: "
 )
 
 const (
