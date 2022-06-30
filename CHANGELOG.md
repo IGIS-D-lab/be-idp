@@ -297,3 +297,21 @@ add endpoint for api parameters. prepare logging middleware
 [Fix]
 
 [Remove]
+
+# 0.3.7
+<p>
+fix readme - version info goes only on CHANGELOG.md. Other information such as example page will be shown on README. fix row count. add asset name to graphleft. 
+</p>
+
+[Add]
+- main.go
+  - func init - initial ascii art
+
+[Change]
+- ./apis
+  - QryDebt.go
+    - func procDebtQry - returns fixed row counts per query.
+
+[Fix]
+
+[Remove]

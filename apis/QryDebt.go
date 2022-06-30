@@ -13,7 +13,7 @@ func ServeDebt(d IDPDebt, epType int, w http.ResponseWriter, r *http.Request) {
 	values := r.URL.Query()
 	log.Println(MSG_DEBT, values)
 
-	dt, dg1, dg2 := procDebtQry(values, d, epType)
+	rows, dt, dg1, dg2 := procDebtQry(values, d, epType)
 
 	sendPacket := IDPDebt{
 		FromSheet:      d.FromSheet,
@@ -22,8 +22,8 @@ func ServeDebt(d IDPDebt, epType int, w http.ResponseWriter, r *http.Request) {
 		Data:           dt,
 		DataGraphLeft:  dg1,
 		DataGraphRight: dg2,
+		RowCount:       rows,
 	}
-	sendPacket.RowCount = len(sendPacket.Data)
 
 	packet, _ := json.Marshal(sendPacket)
 	w.WriteHeader(http.StatusOK)
@@ -51,7 +51,7 @@ func divDebtArray(d []debts, pageNum string) []debts {
 
 }
 
-func procDebtQry(v url.Values, d IDPDebt, forGraph int) ([]debts, []debtsGraphLeft, []debtsGraphRight) {
+func procDebtQry(v url.Values, d IDPDebt, forGraph int) (int, []debts, []debtsGraphLeft, []debtsGraphRight) {
 	var (
 		// string parameters - data search
 		assetType = v.Get("at")
@@ -78,6 +78,7 @@ func procDebtQry(v url.Values, d IDPDebt, forGraph int) ([]debts, []debtsGraphLe
 		pgn = v.Get("pageCount")
 	)
 	var (
+		dataPoints = 0
 		// conditions
 		sendPacketDT = []debts{}
 		sendPacketG1 = []debtsGraphLeft{}
@@ -115,6 +116,7 @@ func procDebtQry(v url.Values, d IDPDebt, forGraph int) ([]debts, []debtsGraphLe
 			switch forGraph {
 			case 0: // table
 				sendPacketDT = append(sendPacketDT, row)
+				dataPoints += 1
 
 			case 1: // graph left
 				r := debtsGraphLeft{
@@ -124,6 +126,7 @@ func procDebtQry(v url.Values, d IDPDebt, forGraph int) ([]debts, []debtsGraphLe
 					LoanAmount:  row.LoanAmount,
 				}
 				sendPacketG1 = append(sendPacketG1, r)
+				dataPoints += 1
 
 			case 2: // graph right
 				r := debtsGraphRight{
@@ -132,8 +135,9 @@ func procDebtQry(v url.Values, d IDPDebt, forGraph int) ([]debts, []debtsGraphLe
 					LPCorp:     row.LPCorp,
 				}
 				sendPacketG2 = append(sendPacketG2, r)
+				dataPoints += 1
 			}
 		}
 	}
-	return divDebtArray(sendPacketDT, pgn), sendPacketG1, sendPacketG2
+	return dataPoints, divDebtArray(sendPacketDT, pgn), sendPacketG1, sendPacketG2
 }

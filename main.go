@@ -2,6 +2,7 @@ package main
 
 import (
 	"IGISBackEnd/apis"
+	"fmt"
 
 	"log"
 	"net/http"
@@ -11,11 +12,14 @@ import (
 )
 
 func init() {
+	initAscii := `
+	___ ___ ___ ___     _   ___ ___ 
+	|_ _/ __|_ _/ __|   /_\ | _ \_ _|
+	 | | (_ || |\__ \  / _ \|  _/| | 
+	|___\___|___|___/ /_/ \_\_| |___|
+									 `
+	fmt.Println(initAscii)
 	log.Println("IGIS IDP Platform Backend Starting at http://127.0.0.1:8080")
-	log.Println("AssetTest: ", apis.TEST_URL_ASSET)
-	log.Println("DebtTest: ", apis.TEST_URL_DEBT)
-	log.Println("MacroTest: ", apis.TEST_URL_MACRO)
-	log.Println("SingleTest: ", apis.TEST_URL_SINGLE)
 }
 
 func main() {
