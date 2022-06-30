@@ -111,6 +111,7 @@ type debts struct {
 type debtsGraphLeft struct {
 	SetDateRate string `json:"sdaterate"`
 	AssetType   string `json:"at"`
+	AssetName   string `json:"an"`
 	LoanDate    string `json:"loandate"`
 	LoanAmount  string `json:"loanamt"`
 }

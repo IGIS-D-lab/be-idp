@@ -122,6 +122,7 @@ func procDebtQry(v url.Values, d IDPDebt, forGraph int) (int, []debts, []debtsGr
 				r := debtsGraphLeft{
 					SetDateRate: row.SetDateRate,
 					AssetType:   row.AssetType,
+					AssetName:   row.AssetName,
 					LoanDate:    row.LoanDate,
 					LoanAmount:  row.LoanAmount,
 				}
