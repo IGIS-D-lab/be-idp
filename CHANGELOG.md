@@ -315,3 +315,22 @@ fix readme - version info goes only on CHANGELOG.md. Other information such as e
 [Fix]
 
 [Remove]
+
+# 0.3.8
+<p>
+add info to graphLeft
+</p>
+
+[Add]
+
+[Change]
+
+[Fix]
+- ./apis
+  - idpRespStrc.go
+    - struct debtsGraphLeft - add AssetName
+  - QryDeb.go
+    - func procDebtQry - adjust code to fit new field AssetName
+    
+
+[Remove]
