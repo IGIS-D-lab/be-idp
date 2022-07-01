@@ -5,7 +5,6 @@ import (
 	"log"
 	"net/http"
 	"net/url"
-	"reflect"
 	"strconv"
 )
 
@@ -31,18 +30,13 @@ func ServeDebt(d IDPDebt, epType int, w http.ResponseWriter, r *http.Request) {
 	w.Write(packet)
 }
 
-func getFieldDebt(v *debts, field string) string {
-	r := reflect.ValueOf(v)
-	f := reflect.Indirect(r).FieldByName(field)
-	return f.String()
-}
-
-func divDebtArray(d []debts, pageNum string) []debts {
+func divDebtArray(sortKey, sortOrd string, d []debts, pageNum string) []debts {
 	if pageNum == "" {
 		return d
 	}
 	p, _ := strconv.Atoi(pageNum)
 	s, e := SINGLE_PAGE_INFO*(p-1), SINGLE_PAGE_INFO*p
+	d = sortByKey(sortKey, sortOrd, d)
 	if e > len(d) {
 		return d[s:]
 	} else {
@@ -58,41 +52,28 @@ func procDebtQry(v url.Values, d IDPDebt, forGraph int) (int, []debts, []debtsGr
 		seniority = v.Get("seniorstr")
 		loanClass = v.Get("loancls")
 		rate      = v.Get("rate")
-	)
-	var (
 		// float64 parameters - data search
 		debtFrom  = v.Get("debtFrom")
 		debtUntil = v.Get("debtUntil")
-	)
-	_ = map[string]string{
-		"at":        assetType,
-		"seniorstr": seniority,
-		"loancls":   loanClass,
-		"rate":      rate,
-	} // fore middleware
-
-	// TODO: create sorting
-	var (
-		_   = v.Get("sortOrd")
-		_   = v.Get("sorkKey")
+		// string sort keys - data sort
+		sO  = v.Get("sortOrd")
+		sK  = v.Get("sortKey")
 		pgn = v.Get("pageCount")
 	)
+
 	var (
-		dataPoints = 0
-		// conditions
+		dataPoints   = 0
 		sendPacketDT = []debts{}
 		sendPacketG1 = []debtsGraphLeft{}
 		sendPacketG2 = []debtsGraphRight{}
 	)
 
 	for _, row := range d.Data {
-		var (
-			cndAssetType  = true
-			cndSeniorty   = true
-			cndLoanClass  = true
-			cndRate       = true
-			cndDebtAmount = true
-		)
+		cndAssetType := true
+		cndSeniorty := true
+		cndLoanClass := true
+		cndRate := true
+		cndDebtAmount := true
 
 		if assetType != "" {
 			cndAssetType = IsWithInChoice(assetType, row.AssetType)
@@ -140,5 +121,5 @@ func procDebtQry(v url.Values, d IDPDebt, forGraph int) (int, []debts, []debtsGr
 			}
 		}
 	}
-	return dataPoints, divDebtArray(sendPacketDT, pgn), sendPacketG1, sendPacketG2
+	return dataPoints, divDebtArray(sK, sO, sendPacketDT, pgn), sendPacketG1, sendPacketG2
 }

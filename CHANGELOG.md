@@ -334,3 +334,29 @@ add info to graphLeft
     
 
 [Remove]
+
+# 0.3.9
+<p>
+add sorting mechanism. change model api
+</p>
+
+[Add]
+- ./apis
+  - QryDebt.go
+    - func divDebtArray - sortByKey inserted
+  - QryDebtSort.go
+    - script for custom sorting functions
+      - custom types
+      - custom Len, Less, Swap for QuickSort Prep
+    - func sortByKey
+  - QryModel.go
+    - add http headers to API
+
+[Change]
+- ./apis
+  - QryDebt.go
+    - func procDebtQry - shorten var declaration, change cndAssetType.. declaration to ":="
+
+[Fix]
+
+[Remove]
