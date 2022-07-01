@@ -52,6 +52,7 @@ func sortByKey(sortKey, sortOrd string, d []debts) []debts {
 	case "loancls":
 		target = ByLoanClass(d)
 	default:
+		return d
 	}
 
 	switch sortOrd {

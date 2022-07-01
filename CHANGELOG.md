@@ -360,3 +360,19 @@ add sorting mechanism. change model api
 [Fix]
 
 [Remove]
+
+# 0.3.10
+<p>
+fix sortByKey. Problem::if sortKey is not present, api panics
+</p>
+
+[Add]
+
+[Change]
+
+[Fix]
+- ./apis
+  - QryDebtSort.go
+    - func sortByKey - add return d to default.
+
+[Remove]
