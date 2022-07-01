@@ -68,6 +68,12 @@ func main() {
 		}).
 		Methods("GET").
 		Name("model coefficients")
+	sV1Model.Path("/pred").
+		HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			apis.ServeModelCalc(d.ModelCoef, d.Macro, w, r)
+		}).
+		Methods("GET").
+		Name("model prediction")
 
 	// api v1 subrouter all
 	sV1 := r.PathPrefix("/api/v1").Subrouter()

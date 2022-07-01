@@ -45,5 +45,4 @@ http://localhost:8080에서 실행. GitBook에서 API 요청 확인 가능.
 |debt| Debt Query (graph2) | http://localhost:8080/api/v1/debt/graphRight?at=%EC%98%A4%ED%94%BC%EC%8A%A4-%ED%98%B8%ED%85%94&seniorstr=%EC%84%A0&loancls=%EB%B8%8C%EB%A6%BF%EC%A7%80&debtFrom=1&debtUntil=1e13&pageCount=1  |
 |model| Model Info | http://localhost:8080/api/v1/model/info |
 |model| Model Coefficient | http://localhost:8080/api/v1/model/coef |
-
-
+|model| Model Prediction | http://localhost:8080/api/v1/model/pred?seniorstr=%EC%84%A0&loancls=%EB%B8%8C%EB%A6%BF%EC%A7%80 |

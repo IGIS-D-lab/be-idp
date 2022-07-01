@@ -31,6 +31,29 @@ type IDPMacro struct {
 	Data       macros `json:"data"`
 }
 
+type IDPModelCoef struct {
+	FromSheet  string        `json:"fsht"`
+	Desc       string        `json:"desc"`
+	LastUpdate string        `json:"last"`
+	Data       []coefficient `json:"data"`
+}
+
+type coefficient struct {
+	VarName   string  `json:"c_name_en"`
+	Coef      float64 `json:"val"`
+	CoefIndex int     `json:"list_num"`
+}
+
+type ModelPrediction struct {
+	BankFix float64 `json:"bankfix"`
+	InsFix  float64 `json:"insfix"`
+	EtcFix  float64 `json:"etcfix"`
+
+	BankFloat float64 `json:"bankfloat"`
+	InsFloat  float64 `json:"insfloat"`
+	EtcFloat  float64 `json:"etcfloat"`
+}
+
 type assets struct {
 	Universe        int8   `json:"univ"`
 	FundCode        string `json:"fc"`
@@ -134,5 +157,5 @@ type macros struct {
 
 type macroRow struct {
 	Date  string  `json:"date"`
-	Value float32 `json:"value"`
+	Value float64 `json:"value"`
 }

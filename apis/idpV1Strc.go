@@ -5,5 +5,5 @@ type IDPDataSet struct {
 	Debt      IDPDebt
 	Macro     IDPMacro
 	ModelInfo []byte
-	ModelCoef []byte
+	ModelCoef IDPModelCoef
 }

@@ -376,3 +376,30 @@ fix sortByKey. Problem::if sortKey is not present, api panics
     - func sortByKey - add return d to default.
 
 [Remove]
+
+# 0.3.11
+<p>
+model prediction calculation will be served from the server side. add servemodelcalc function and endpoint /pred
+</p>
+
+[Add]
+- ./apis
+  - QryModel.go
+    - func findRecentMacro
+    - func findDataPointMap
+    - func genParameterMap
+    - func procModelQuery
+    - func calcInterest
+    - func ServeModelCalc
+  - idpRespStrc.go
+    - func IDPModelCoef
+    - func coefficient
+    - func ModelPrediction
+
+[Change]
+- ./apis
+  - QryModel.go 
+    - func ServeModelCoef - throws JSON -> []byte encoded file.
+  - idpData.go
+    - func mntModelCoef - unmarshal JSON file with struct 
+[Fix]

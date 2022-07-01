@@ -25,7 +25,7 @@ func MntData() IDPDataSet {
 	}
 
 	modelInfo := mntModelInfo()
-	modelCoef := mntModelCoef()
+	modelCoef, err := mntModelCoef()
 
 	return IDPDataSet{
 		Asset:     assetData,
@@ -113,7 +113,7 @@ func mntModelInfo() []byte {
 	return byteVal
 }
 
-func mntModelCoef() []byte {
+func mntModelCoef() (IDPModelCoef, error) {
 	file, err := os.Open("./asset/idpCoef.json")
 	if err != nil {
 		log.Println(DATA_ERR_MODEL, err)
@@ -123,5 +123,12 @@ func mntModelCoef() []byte {
 	byteVal, _ := ioutil.ReadAll(file)
 	byteVal = bytes.Replace(byteVal, []byte(": NaN"), []byte(":null"), -1)
 
-	return byteVal
+	var data IDPModelCoef
+	err = json.Unmarshal(byteVal, &data)
+	if err != nil {
+		log.Println(DATA_ERR_MODEL, err)
+		return data, err
+	} else {
+		return data, nil
+	}
 }
