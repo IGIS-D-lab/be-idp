@@ -107,13 +107,13 @@ func ServeModelCalc(model IDPModelCoef, macro IDPMacro, w http.ResponseWriter, r
 	b := genParameterMap(model.Data)
 
 	sendpacket := ModelPrediction{
-		BankFix: calcInterest(x, b, 19, 15),
-		InsFix:  calcInterest(x, b, 18, 15),
-		EtcFix:  calcInterest(x, b, 17, 15),
+		BankFix: []float64{calcInterest(x, b, 19, 15), calcInterest(x, b, 19, 15)},
+		InsFix:  []float64{calcInterest(x, b, 18, 15), calcInterest(x, b, 18, 15)},
+		EtcFix:  []float64{calcInterest(x, b, 17, 15), calcInterest(x, b, 17, 15)},
 
-		BankFloat: calcInterest(x, b, 19, 16),
-		InsFloat:  calcInterest(x, b, 18, 16),
-		EtcFloat:  calcInterest(x, b, 17, 16),
+		BankFloat: []float64{calcInterest(x, b, 19, 16), calcInterest(x, b, 19, 16)},
+		InsFloat:  []float64{calcInterest(x, b, 18, 16), calcInterest(x, b, 18, 16)},
+		EtcFloat:  []float64{calcInterest(x, b, 17, 16), calcInterest(x, b, 17, 16)},
 	}
 	packet, _ := json.Marshal(sendpacket)
 	w.WriteHeader(http.StatusOK)

@@ -45,13 +45,13 @@ type coefficient struct {
 }
 
 type ModelPrediction struct {
-	BankFix float64 `json:"bankfix"`
-	InsFix  float64 `json:"insfix"`
-	EtcFix  float64 `json:"etcfix"`
+	BankFix []float64 `json:"bankfix"`
+	InsFix  []float64 `json:"insfix"`
+	EtcFix  []float64 `json:"etcfix"`
 
-	BankFloat float64 `json:"bankfloat"`
-	InsFloat  float64 `json:"insfloat"`
-	EtcFloat  float64 `json:"etcfloat"`
+	BankFloat []float64 `json:"bankfloat"`
+	InsFloat  []float64 `json:"insfloat"`
+	EtcFloat  []float64 `json:"etcfloat"`
 }
 
 type assets struct {

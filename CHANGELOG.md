@@ -403,3 +403,17 @@ model prediction calculation will be served from the server side. add servemodel
   - idpData.go
     - func mntModelCoef - unmarshal JSON file with struct 
 [Fix]
+
+# 0.3.12
+<p>
+change model prediction calculation output data type from single point to array of point.
+</p>
+
+[Add]
+
+[Change]
+- ./apis
+  - idpRespStrc.go
+    - struct ModelPrediction - change field's value's data type from float64 to []float64
+  - QryModel.go
+    - func ServeModelCalc - change accordingly
