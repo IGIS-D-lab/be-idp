@@ -7,6 +7,11 @@ import (
 	"net/url"
 )
 
+/*
+	ServeSingle
+	- serve need to provide detail information
+	- single out fund by its unique index 'idx'
+*/
 func ServeSingle(d IDPDebt, w http.ResponseWriter, r *http.Request) {
 	values := r.URL.Query()
 	log.Println(MSG_SINGLE, values)

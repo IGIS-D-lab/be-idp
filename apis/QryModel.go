@@ -6,12 +6,20 @@ import (
 	"net/url"
 )
 
+/*
+	ServeModelInfo
+	- Serve idpModelInfo.json file directly without any queries
+*/
 func ServeModelInfo(d []byte, w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-type", "application/json")
 	w.Write(d)
 }
 
+/*
+	ServeModelCoef
+	- Serve idpModelCoef.json file directly without any queries
+*/
 func ServeModelCoef(d IDPModelCoef, w http.ResponseWriter, r *http.Request) {
 	packet, _ := json.Marshal(d)
 	w.WriteHeader(http.StatusOK)
@@ -19,6 +27,11 @@ func ServeModelCoef(d IDPModelCoef, w http.ResponseWriter, r *http.Request) {
 	w.Write(packet)
 }
 
+/*
+	findRecentMacro
+	- from macro data rows, compare dates (YYYYMMDD str)
+	- return macro data row containing maximum dates
+*/
 func findRecentMacro(d []macroRow) macroRow {
 	var (
 		maxDate = "00000000" // initial state
@@ -32,6 +45,13 @@ func findRecentMacro(d []macroRow) macroRow {
 	return recent
 }
 
+/*
+	genDataPointMap
+	- Coefficient 'b' in the model is mapped with integer
+	  - -1: constant etc.
+	- Function that makes 'X'
+	- Provide map[ coefficient key ] = datapoint value
+*/
 func genDataPointMap(mac IDPMacro) map[int]float64 {
 	// get recent struct rows within O(n) time - TODO: change it with database
 	var result = map[int]float64{}
@@ -46,6 +66,11 @@ func genDataPointMap(mac IDPMacro) map[int]float64 {
 	return result
 }
 
+/*
+	genParameterMap
+	- Function that makes 'b'
+	- map[ coefficient key ] = coefficient
+*/
 func genParameterMap(coefs []coefficient) map[int]float64 {
 	// coef json file. - each model variable has an integer designated to it
 	// match that integer with coefficient.
@@ -56,10 +81,13 @@ func genParameterMap(coefs []coefficient) map[int]float64 {
 	return result
 }
 
+/*
+	procModeQuery
+	- returns user searched
+	- 1) loanClassMap - model parameter integer key for loancls
+	- 2) seniorityMap - model parameter integer key for seniorstr
+*/
 func procModelQuery(v url.Values) (int, int) {
-	// returns user searched
-	// 1) loanClassMap - model parameter integer key for loancls
-	// 2) seniorityMap - model parameter integer key for seniorstr
 	var (
 		seniority = v.Get("seniorstr")
 		loanClass = v.Get("loancls")
@@ -81,6 +109,13 @@ func procModelQuery(v url.Values) (int, int) {
 	return loanClassMap[loanClass], seniorityMap[seniority]
 }
 
+/*
+	calcInterest
+	- get 2 map[int]float x, b
+	- x [ coefficient key ] * b [ coefficient key ]
+
+	- return per liqProvider and intRate
+*/
 func calcInterest(x, b map[int]float64, liqProv, intRate int) float64 {
 	var res float64
 	for multiKey, val := range b {
@@ -92,6 +127,12 @@ func calcInterest(x, b map[int]float64, liqProv, intRate int) float64 {
 	return res
 }
 
+/*
+	ServeModelCalc
+	- Fill in ModelPrediction
+	- liquidity provider in Bank, Insurance(Ins), Etc
+	- rate in Fix, Float
+*/
 func ServeModelCalc(model IDPModelCoef, macro IDPMacro, w http.ResponseWriter, r *http.Request) {
 	values := r.URL.Query()
 

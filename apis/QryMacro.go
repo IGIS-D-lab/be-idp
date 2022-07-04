@@ -8,6 +8,10 @@ import (
 	"github.com/gorilla/mux"
 )
 
+/*
+	ServeMacroWhole
+	- TODO: Change it into r.URL.Query
+*/
 func ServeMacroWhole(d IDPMacro, w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	qry := procMacroParam(params)

@@ -6,6 +6,18 @@ import (
 	"strings"
 )
 
+/*
+	How to sort custom structure by field value.
+	or
+	How to make custom sort keys
+
+	1) define type - this will be sort interface
+	2) for that type define methods Len(), Less(), and Swap()
+		- functions necessary for quick sort
+	3) if reverse sort is needed, sort.Reverse( sort interface )
+	4) sort.Sort( sort interface )
+*/
+
 type (
 	ByInvestType  []debts
 	BySeniorStr   []debts

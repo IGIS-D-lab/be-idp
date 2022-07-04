@@ -402,7 +402,10 @@ model prediction calculation will be served from the server side. add servemodel
     - func ServeModelCoef - throws JSON -> []byte encoded file.
   - idpData.go
     - func mntModelCoef - unmarshal JSON file with struct 
+
 [Fix]
+
+[Remove]
 
 # 0.3.12
 <p>
@@ -417,3 +420,25 @@ change model prediction calculation output data type from single point to array 
     - struct ModelPrediction - change field's value's data type from float64 to []float64
   - QryModel.go
     - func ServeModelCalc - change accordingly
+  
+[Fix]
+
+[Remove]
+
+
+# 0.3.13
+<p>
+Fix debt query search. write annotation for function. 
+</p>
+
+[Add]
+- (annotations)
+
+[Change]
+
+[Fix]
+- ./apis
+  - QryDebt.go
+    - now support investType query (it)
+
+[Remove]

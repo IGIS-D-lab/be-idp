@@ -8,6 +8,10 @@ import (
 	"os"
 )
 
+/*
+	MntData
+	- mount data before you serve API
+*/
 func MntData() IDPDataSet {
 	assetData, err := mntAsset()
 	if err != nil {
@@ -65,6 +69,8 @@ func mntDebt() (IDPDebt, error) {
 		log.Println(MSG_DEBT, "Successfully opened")
 	}
 
+	// python JSON compiler gives : NaN
+	// go cannot read this. Therefore changing it to :null
 	byteVal, _ := ioutil.ReadAll(file)
 	byteVal = bytes.Replace(byteVal, []byte(": NaN"), []byte(":null"), -1)
 

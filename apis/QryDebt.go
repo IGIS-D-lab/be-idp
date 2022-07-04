@@ -8,6 +8,11 @@ import (
 	"strconv"
 )
 
+/*
+	ServeDebt
+	- Get Query map[string]string from u.URL.Query()
+	- epType 0: dataTable, 1: graphLeft, 2: graphRight
+*/
 func ServeDebt(d IDPDebt, epType int, w http.ResponseWriter, r *http.Request) {
 	values := r.URL.Query()
 	log.Println(MSG_DEBT, values)
@@ -30,6 +35,12 @@ func ServeDebt(d IDPDebt, epType int, w http.ResponseWriter, r *http.Request) {
 	w.Write(packet)
 }
 
+/*
+	divDebtArray
+	- enables paceCount
+	- enables sorting
+	- upon request -> get whole data -> sort -> divide it by pageCount
+*/
 func divDebtArray(sortKey, sortOrd string, d []debts, pageNum string) []debts {
 	if pageNum == "" {
 		return d
@@ -45,13 +56,20 @@ func divDebtArray(sortKey, sortOrd string, d []debts, pageNum string) []debts {
 
 }
 
+/*
+	procDebtQry
+	- url.Values enables optional existence query
+	- if "at" not in url.Values hashmap returns ""
+	- if "at" not in url.Values do not check matches.
+*/
 func procDebtQry(v url.Values, d IDPDebt, forGraph int) (int, []debts, []debtsGraphLeft, []debtsGraphRight) {
 	var (
 		// string parameters - data search
-		assetType = v.Get("at")
-		seniority = v.Get("seniorstr")
-		loanClass = v.Get("loancls")
-		rate      = v.Get("rate")
+		assetType  = v.Get("at")
+		seniority  = v.Get("seniorstr")
+		loanClass  = v.Get("loancls")
+		rate       = v.Get("rate")
+		investType = v.Get("it")
 		// float64 parameters - data search
 		debtFrom  = v.Get("debtFrom")
 		debtUntil = v.Get("debtUntil")
@@ -73,6 +91,7 @@ func procDebtQry(v url.Values, d IDPDebt, forGraph int) (int, []debts, []debtsGr
 		cndSeniorty := true
 		cndLoanClass := true
 		cndRate := true
+		cndInvestType := true
 		cndDebtAmount := true
 
 		if assetType != "" {
@@ -87,13 +106,16 @@ func procDebtQry(v url.Values, d IDPDebt, forGraph int) (int, []debts, []debtsGr
 		if loanClass != "" {
 			cndLoanClass = IsWithInChoice(loanClass, row.LoanClass)
 		}
+		if investType != "" {
+			cndInvestType = IsWithInChoice(investType, row.InvestType)
+		}
 		if (debtFrom != "") && (debtUntil != "") {
 			df, _ := strconv.ParseFloat(debtFrom, 64)
 			du, _ := strconv.ParseFloat(debtUntil, 64)
 			cndDebtAmount = IsWithInSlider(int(df), int(du), row.LoanAmount)
 		}
 
-		if cndAssetType && cndSeniorty && cndLoanClass && cndRate && cndDebtAmount {
+		if cndAssetType && cndSeniorty && cndLoanClass && cndRate && cndInvestType && cndDebtAmount {
 			switch forGraph {
 			case 0: // table
 				sendPacketDT = append(sendPacketDT, row)
