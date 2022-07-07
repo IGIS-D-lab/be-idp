@@ -442,3 +442,31 @@ Fix debt query search. write annotation for function.
     - now support investType query (it)
 
 [Remove]
+
+# 0.3.14
+<p>
+change model prediction from point to band. prep for docker. todo compile with external file
+</p>
+
+[Add]
+- ./apis
+  - idpRespStrc.go
+    - struct IDPModelInfo
+    - struct modelmeta
+- ./Dockerfile  - prep for docker deploy
+
+[Change]  
+- ./apis
+  - idpData.go
+    - func mntModelInfo - unmarshal it into struct
+    - func mntModelCoef - change filesource from idpCoef.json to idpCoef2.json
+  - idpV1Strc.go
+    - struct IDPDataSet - change accordingly
+  - QryModel.go
+    - func ServeModelCalc - add band to sendpacket point predictions
+
+  [Fix]
+
+  [Remove]
+
+

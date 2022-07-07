@@ -70,7 +70,7 @@ func main() {
 		Name("model coefficients")
 	sV1Model.Path("/pred").
 		HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			apis.ServeModelCalc(d.ModelCoef, d.Macro, w, r)
+			apis.ServeModelCalc(d.ModelCoef, d.ModelInfo, d.Macro, w, r)
 		}).
 		Methods("GET").
 		Name("model prediction")

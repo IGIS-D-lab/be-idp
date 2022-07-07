@@ -10,10 +10,11 @@ import (
 	ServeModelInfo
 	- Serve idpModelInfo.json file directly without any queries
 */
-func ServeModelInfo(d []byte, w http.ResponseWriter, r *http.Request) {
+func ServeModelInfo(d IDPModelInfo, w http.ResponseWriter, r *http.Request) {
+	packet, _ := json.Marshal(d)
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-type", "application/json")
-	w.Write(d)
+	w.Write(packet)
 }
 
 /*
@@ -121,8 +122,9 @@ func calcInterest(x, b map[int]float64, liqProv, intRate int) float64 {
 	for multiKey, val := range b {
 		if (multiKey == liqProv) || (multiKey == intRate) {
 			res += val
+		} else {
+			res += (x[multiKey] * b[multiKey])
 		}
-		res += (x[multiKey] * b[multiKey])
 	}
 	return res
 }
@@ -133,7 +135,7 @@ func calcInterest(x, b map[int]float64, liqProv, intRate int) float64 {
 	- liquidity provider in Bank, Insurance(Ins), Etc
 	- rate in Fix, Float
 */
-func ServeModelCalc(model IDPModelCoef, macro IDPMacro, w http.ResponseWriter, r *http.Request) {
+func ServeModelCalc(model IDPModelCoef, band IDPModelInfo, macro IDPMacro, w http.ResponseWriter, r *http.Request) {
 	values := r.URL.Query()
 
 	// set x

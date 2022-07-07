@@ -28,7 +28,7 @@ func MntData() IDPDataSet {
 		log.Panicln(DATA_PANIC_MACRO, err)
 	}
 
-	modelInfo := mntModelInfo()
+	modelInfo, err := mntModelInfo()
 	modelCoef, err := mntModelCoef()
 
 	return IDPDataSet{
@@ -106,7 +106,7 @@ func mntMacro() (IDPMacro, error) {
 
 }
 
-func mntModelInfo() []byte {
+func mntModelInfo() (IDPModelInfo, error) {
 	file, err := os.Open("./asset/idpModelInfo.json")
 	if err != nil {
 		log.Println(DATA_ERR_MODEL, err)
@@ -116,11 +116,18 @@ func mntModelInfo() []byte {
 	byteVal, _ := ioutil.ReadAll(file)
 	byteVal = bytes.Replace(byteVal, []byte(": NaN"), []byte(":null"), -1)
 
-	return byteVal
+	var data IDPModelInfo
+	err = json.Unmarshal(byteVal, &data)
+	if err != nil {
+		log.Println(DATA_ERR_MODEL, err)
+		return data, err
+	} else {
+		return data, nil
+	}
 }
 
 func mntModelCoef() (IDPModelCoef, error) {
-	file, err := os.Open("./asset/idpCoef.json")
+	file, err := os.Open("./asset/idpCoef2.json")
 	if err != nil {
 		log.Println(DATA_ERR_MODEL, err)
 	} else {

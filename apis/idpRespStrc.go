@@ -31,6 +31,19 @@ type IDPMacro struct {
 	Data       macros `json:"data"`
 }
 
+type IDPModelInfo struct {
+	FromSheet  string      `json:"fsht"`
+	Desc       string      `json:"desc"`
+	LastUpdate string      `json:"last"`
+	Data       []modelmeta `json:"data"`
+}
+
+type modelmeta struct {
+	ModelIndex int     `json:"num"`
+	ModelStDev float64 `json:"sd"`
+	InputPair  string  `json:"inp_pair"`
+}
+
 type IDPModelCoef struct {
 	FromSheet  string        `json:"fsht"`
 	Desc       string        `json:"desc"`
