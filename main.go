@@ -22,6 +22,79 @@ func init() {
 	log.Println("IGIS IDP Platform Backend Starting at http://127.0.0.1:8080")
 }
 
+func routeLanding(rt *mux.Router, d apis.IDPDataSet) {
+	// single fund request sub-endpoint
+	rt.HandleFunc("/single", func(w http.ResponseWriter, r *http.Request) {
+		apis.ServeSingle(d.Debt, w, r)
+	}).
+		Methods("GET").
+		Name("singleInfo")
+	// asset(checklist sheet) sub-endpoint
+	rt.HandleFunc("/asset", func(w http.ResponseWriter, r *http.Request) {
+		apis.ServeAssetWhole(d.Asset, w, r)
+	}).
+		Methods("GET").
+		Queries(
+			"strat", "{strat}",
+		)
+}
+
+func routeDebt(rt *mux.Router, d apis.IDPDataSet) {
+	// dataTable sub-endpoint
+	rt.Path("/dataTable").
+		HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			apis.ServeDebt(d.Debt, 0, w, r)
+		}).
+		Methods("GET").
+		Name("debt.datatable")
+	// graphLeft sub-endpoint
+	rt.Path("/graphLeft").
+		HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			apis.ServeDebt(d.Debt, 1, w, r)
+		}).
+		Methods("GET").
+		Name("debt.graphLeft")
+	// graphRight sub-endpoint
+	rt.Path("/graphRight").
+		HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			apis.ServeDebt(d.Debt, 2, w, r)
+		}).
+		Methods("GET").
+		Name("debt.graphRight")
+}
+
+func routeModel(rt *mux.Router, d apis.IDPDataSet) {
+	// model info sub-endpoint
+	rt.Path("/info").
+		HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			apis.ServeModelInfo(d.ModelInfo, w, r)
+		}).
+		Methods("GET").
+		Name("model information")
+	// model coef sub-endpoint
+	rt.Path("/coef").
+		HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			apis.ServeModelCoef(d.ModelCoef, w, r)
+		}).
+		Methods("GET").
+		Name("model coefficients")
+	// model prediction sub-endpoint
+	rt.Path("/pred").
+		HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			apis.ServeModelCalc(d.ModelCoef, d.ModelInfo, d.Macro, w, r)
+		}).
+		Methods("GET").
+		Name("model prediction")
+}
+
+func routeMacro(rt *mux.Router, d apis.IDPDataSet) {
+	rt.Path("/dataTable").
+		HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			apis.ServeMacro(d.Macro, w, r)
+		}).
+		Methods("GET").Name("macro data")
+}
+
 func main() {
 	// _, _ = logs.LogInit()
 	r := mux.NewRouter()
@@ -30,76 +103,23 @@ func main() {
 	d := apis.MntData()
 
 	// api landing page
-	r.HandleFunc("/", apis.ServeLanding).
-		Methods("GET")
-
-	// api v1 subrouter -  debt
-	sV1Debt := r.PathPrefix("/api/v1/debt").Subrouter()
-	sV1Debt.Path("/dataTable").
-		HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			apis.ServeDebt(d.Debt, 0, w, r)
-		}).
-		Methods("GET").
-		Name("debt.datatable")
-	sV1Debt.Path("/graphLeft").
-		HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			apis.ServeDebt(d.Debt, 1, w, r)
-		}).
-		Methods("GET").
-		Name("debt.graphLeft")
-	sV1Debt.Path("/graphRight").
-		HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			apis.ServeDebt(d.Debt, 2, w, r)
-		}).
-		Methods("GET").
-		Name("debt.graphRight")
-
-	// api v1 subrouter - model
-	sV1Model := r.PathPrefix("/api/v1/model").Subrouter()
-	sV1Model.Path("/info").
-		HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			apis.ServeModelInfo(d.ModelInfo, w, r)
-		}).
-		Methods("GET").
-		Name("model information")
-	sV1Model.Path("/coef").
-		HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			apis.ServeModelCoef(d.ModelCoef, w, r)
-		}).
-		Methods("GET").
-		Name("model coefficients")
-	sV1Model.Path("/pred").
-		HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			apis.ServeModelCalc(d.ModelCoef, d.ModelInfo, d.Macro, w, r)
-		}).
-		Methods("GET").
-		Name("model prediction")
+	r.HandleFunc("/", apis.ServeLanding).Methods("GET")
 
 	// api v1 subrouter all
 	sV1 := r.PathPrefix("/api/v1").Subrouter()
-	sV1.HandleFunc("/single", func(w http.ResponseWriter, r *http.Request) {
-		apis.ServeSingle(d.Debt, w, r)
-	}).
-		Methods("GET").
-		Name("singleInfo")
+	routeLanding(sV1, d)
 
-	// TODO: EDIT Below
-	sV1.HandleFunc("/asset", func(w http.ResponseWriter, r *http.Request) {
-		apis.ServeAssetWhole(d.Asset, w, r)
-	}).
-		Methods("GET").
-		Queries(
-			"strat", "{strat}",
-		)
-	sV1.HandleFunc("/macro", func(w http.ResponseWriter, r *http.Request) {
-		apis.ServeMacroWhole(d.Macro, w, r)
-	}).
-		Methods("GET").
-		Queries(
-			"commodity", "{commodity}",
-			"yearFrom", "{yearFrom:[0-9]+}",
-			"yearUntil", "{yearUntil:[0-9]+}",
-		)
+	// api v1 subrouter -  debt
+	sV1Debt := r.PathPrefix("/api/v1/debt").Subrouter()
+	routeDebt(sV1Debt, d)
+
+	// api v1 subrouter - model
+	sV1Model := r.PathPrefix("/api/v1/model").Subrouter()
+	routeModel(sV1Model, d)
+
+	// api v1 subrouter - macro
+	sV1Macro := r.PathPrefix("/api/v1/macro").Subrouter()
+	routeMacro(sV1Macro, d)
 
 	// serve
 	srv := &http.Server{

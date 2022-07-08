@@ -37,6 +37,14 @@ func ServeLanding(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "IGIS Debt Platform landing page\n")
 }
 
+func IsWithInDate(s, e string, val string) bool {
+	if (val >= s) && (val <= e) {
+		return true
+	} else {
+		return false
+	}
+}
+
 /*
 	IsWithInSlider
 	- return true if val is within slider s and e

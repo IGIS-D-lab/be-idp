@@ -2,57 +2,59 @@ package apis
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
-	"strconv"
-
-	"github.com/gorilla/mux"
+	"net/url"
 )
 
 /*
-	ServeMacroWhole
-	- TODO: Change it into r.URL.Query
+	ServeMacro
+	- serve dataTable aker
 */
-func ServeMacroWhole(d IDPMacro, w http.ResponseWriter, r *http.Request) {
-	params := mux.Vars(r)
-	qry := procMacroParam(params)
+func ServeMacro(d IDPMacro, w http.ResponseWriter, r *http.Request) {
+	values := r.URL.Query()
+	log.Println(MSG_MODEL, values)
 
-	packet, _ := json.Marshal(serveMacroQry(qry, d))
+	dt := procMacroQuery(values, d)
+	packet, _ := json.Marshal(dt)
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-type", "application/json")
 	w.Write(packet)
 }
 
-func procMacroParam(m map[string]string) ReqIDPMacro {
-	q := ReqIDPMacro{
-		YearFrom: func() int {
-			yf, _ := strconv.Atoi(m["yearFrom"])
-			return yf
-		}(),
-		YearUntil: func() int {
-			yu, _ := strconv.Atoi(m["yearUntil"])
-			return yu
-		}(),
-		Commodity: m["commodity"],
-	}
-	return q
-}
+func procMacroQuery(v url.Values, d IDPMacro) IDPMacro {
+	var (
+		dateFrom  = v.Get("dateFrom")
+		dateUntil = v.Get("dateUntil")
+	)
 
-func serveMacroQry(rq ReqIDPMacro, d IDPMacro) []macroRow {
-	dMap := map[string][]macroRow{
-		"kr1y":      d.Data.KR1Y,
-		"kr3y":      d.Data.KR3Y,
-		"kr5y":      d.Data.KR5Y,
-		"ifd1y":     d.Data.IFD1Y,
-		"cd91d":     d.Data.CD91D,
-		"cp91d":     d.Data.CP91D,
-		"koribor3m": d.Data.KORIBOR3M,
+	if (dateFrom == "") && (dateUntil == "") {
+		return d
 	}
-	var sendPacket = []macroRow{}
-	for _, row := range dMap[rq.Commodity] {
-		y, _ := strconv.Atoi(row.Date[:4])
-		if (y >= rq.YearFrom) && (y <= rq.YearUntil) {
-			sendPacket = append(sendPacket, row)
-		}
+
+	sendPacket := IDPMacro{
+		FromSheet:  d.FromSheet,
+		Desc:       d.Desc,
+		LastUpdate: d.LastUpdate,
+		Data: macros{
+			KR1Y:      procByAsset(d.Data.KR1Y, dateFrom, dateUntil),
+			KR3Y:      procByAsset(d.Data.KR3Y, dateFrom, dateUntil),
+			KR5Y:      procByAsset(d.Data.KR5Y, dateFrom, dateUntil),
+			IFD1Y:     procByAsset(d.Data.IFD1Y, dateFrom, dateUntil),
+			CD91D:     procByAsset(d.Data.CD91D, dateFrom, dateUntil),
+			CP91D:     procByAsset(d.Data.CP91D, dateFrom, dateUntil),
+			KORIBOR3M: procByAsset(d.Data.KORIBOR3M, dateFrom, dateUntil),
+		},
 	}
 	return sendPacket
+}
+
+func procByAsset(multiRows []macroRow, dtF, dtU string) []macroRow {
+	var result = []macroRow{}
+	for _, row := range multiRows {
+		if IsWithInDate(dtF, dtU, row.Date) {
+			result = append(result, row)
+		}
+	}
+	return result
 }

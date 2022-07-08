@@ -465,8 +465,51 @@ change model prediction from point to band. prep for docker. todo compile with e
   - QryModel.go
     - func ServeModelCalc - add band to sendpacket point predictions
 
-  [Fix]
+[Fix]
 
-  [Remove]
+[Remove]
 
 
+# 0.4.1
+<p>
+Fix band. Add Macro. Query macro by dateFrom and dateUntil
+</p>
+
+[Add]
+- ./apis
+  - QryModel.go
+    - func parseModelInfo
+  - QryMacro.go
+    - func ServeMacro
+    - func procMacroQuery
+    - func procByAsset
+  - idp.go
+    - func IsWithInDate
+- main.go
+  - func routeDebt
+  - func routeModel
+  - func routeMacro
+  - func routeLanding
+
+[Change]
+- main.go
+  - func main - separate it
+    - routeLanding
+    - routeDebt
+    - routeModel
+    - routeMacro
+    - routes moved to routing.go (see [Add])
+
+[Fix]
+- ./apis
+  - QryModel.go
+    - func ServeModelCalc - fix band
+    - func findRecentMacro - BUG FIX - loop now updates maxDate also.
+
+[Remove]
+- main.go
+  - remove /api/v1/macro endpoint
+- ./apis
+  - QryMacro.go
+    - func serveMacroQry
+    - func serveMacroWhole

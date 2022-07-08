@@ -38,8 +38,8 @@ http://localhost:8080에서 실행. GitBook에서 API 요청 확인 가능.
 |Subroute| Content | Testing URL |
 |-|--|--|
 |main| Single Fund Query | http://localhost:8080/api/v1/single?fc=112001&idx=1 |
-|main| Macro Query | http://localhost:8080/api/v1/macro?commodity=kr1y&yearFrom=2010&yearUntil=2020 |
 |main| Asset Query | http://localhost:8080/api/v1/asset?strat=Core |
+|macro| Macro Query | http://localhost:8080/api/v1/macro/dataTable?dateFrom=20220101&dateUntil=20220801 |
 |debt| Debt Query (Table) | http://localhost:8080/api/v1/debt/dataTable?at=%EC%98%A4%ED%94%BC%EC%8A%A4-%ED%98%B8%ED%85%94&seniorstr=%EC%84%A0&loancls=%EB%B8%8C%EB%A6%BF%EC%A7%80&debtFrom=1&debtUntil=1e13&pageCount=1  |
 |debt| Debt Query (graph1) | http://localhost:8080/api/v1/debt/graphLeft?at=%EC%98%A4%ED%94%BC%EC%8A%A4-%ED%98%B8%ED%85%94&seniorstr=%EC%84%A0&loancls=%EB%B8%8C%EB%A6%BF%EC%A7%80&debtFrom=1&debtUntil=1e13&pageCount=1  |
 |debt| Debt Query (graph2) | http://localhost:8080/api/v1/debt/graphRight?at=%EC%98%A4%ED%94%BC%EC%8A%A4-%ED%98%B8%ED%85%94&seniorstr=%EC%84%A0&loancls=%EB%B8%8C%EB%A6%BF%EC%A7%80&debtFrom=1&debtUntil=1e13&pageCount=1  |

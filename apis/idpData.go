@@ -29,7 +29,13 @@ func MntData() IDPDataSet {
 	}
 
 	modelInfo, err := mntModelInfo()
+	if err != nil {
+		log.Panicln(DATA_PANIC_MODEL, err)
+	}
 	modelCoef, err := mntModelCoef()
+	if err != nil {
+		log.Panicln(DATA_PANIC_MODEL, err)
+	}
 
 	return IDPDataSet{
 		Asset:     assetData,
@@ -85,7 +91,7 @@ func mntDebt() (IDPDebt, error) {
 }
 
 func mntMacro() (IDPMacro, error) {
-	file, err := os.Open("./asset/idpMacro2.json")
+	file, err := os.Open("./asset/idpMacro3.json")
 	if err != nil {
 		log.Println(DATA_ERR_MACRO, err)
 	} else {

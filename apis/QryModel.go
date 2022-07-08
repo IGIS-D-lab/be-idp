@@ -40,6 +40,7 @@ func findRecentMacro(d []macroRow) macroRow {
 	)
 	for _, r := range d {
 		if r.Date >= maxDate {
+			maxDate = r.Date
 			recent = r
 		}
 	}
@@ -130,6 +131,19 @@ func calcInterest(x, b map[int]float64, liqProv, intRate int) float64 {
 }
 
 /*
+	parseModelInfo
+	- deconstruct IDPModelInfo struct
+	- usable hash map
+*/
+func parseModelInfo(band IDPModelInfo) map[int]float64 {
+	var result = map[int]float64{}
+	for _, d := range band.Data {
+		result[d.ModelIndex] = d.ModelStDev
+	}
+	return result
+}
+
+/*
 	ServeModelCalc
 	- Fill in ModelPrediction
 	- liquidity provider in Bank, Insurance(Ins), Etc
@@ -141,6 +155,7 @@ func ServeModelCalc(model IDPModelCoef, band IDPModelInfo, macro IDPMacro, w htt
 	// set x
 	// x: categorical data
 	userSearch1, userSearch2 := procModelQuery(values)
+
 	// x: recent Macro Values
 	x := genDataPointMap(macro)
 	x[userSearch1] = 1
@@ -149,14 +164,35 @@ func ServeModelCalc(model IDPModelCoef, band IDPModelInfo, macro IDPMacro, w htt
 	// set coefficient
 	b := genParameterMap(model.Data)
 
-	sendpacket := ModelPrediction{
-		BankFix: []float64{calcInterest(x, b, 19, 15), calcInterest(x, b, 19, 15)},
-		InsFix:  []float64{calcInterest(x, b, 18, 15), calcInterest(x, b, 18, 15)},
-		EtcFix:  []float64{calcInterest(x, b, 17, 15), calcInterest(x, b, 17, 15)},
+	// set std dev
+	bandMap := parseModelInfo(band)
 
-		BankFloat: []float64{calcInterest(x, b, 19, 16), calcInterest(x, b, 19, 16)},
-		InsFloat:  []float64{calcInterest(x, b, 18, 16), calcInterest(x, b, 18, 16)},
-		EtcFloat:  []float64{calcInterest(x, b, 17, 16), calcInterest(x, b, 17, 16)},
+	sendpacket := ModelPrediction{
+		BankFix: []float64{
+			calcInterest(x, b, 19, 15) - bandMap[3],
+			calcInterest(x, b, 19, 15) + bandMap[3],
+		},
+		InsFix: []float64{
+			calcInterest(x, b, 18, 15) - bandMap[1],
+			calcInterest(x, b, 18, 15) + bandMap[1],
+		},
+		EtcFix: []float64{
+			calcInterest(x, b, 17, 15) - bandMap[5],
+			calcInterest(x, b, 17, 15) + bandMap[5],
+		},
+
+		BankFloat: []float64{
+			calcInterest(x, b, 19, 16) - bandMap[4],
+			calcInterest(x, b, 19, 16) + bandMap[4],
+		},
+		InsFloat: []float64{
+			calcInterest(x, b, 18, 16) - bandMap[2],
+			calcInterest(x, b, 18, 16) + bandMap[2],
+		},
+		EtcFloat: []float64{
+			calcInterest(x, b, 17, 16) - bandMap[6],
+			calcInterest(x, b, 17, 16) + bandMap[6],
+		},
 	}
 	packet, _ := json.Marshal(sendpacket)
 	w.WriteHeader(http.StatusOK)
