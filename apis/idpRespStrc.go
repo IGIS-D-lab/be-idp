@@ -145,6 +145,8 @@ type debts struct {
 }
 
 type debtsGraphLeft struct {
+	UniqueIndex string `json:"idx"`
+	FundCode    string `json:"fc"`
 	SetDateRate string `json:"sdaterate"`
 	AssetType   string `json:"at"`
 	AssetName   string `json:"an"`
@@ -153,9 +155,10 @@ type debtsGraphLeft struct {
 }
 
 type debtsGraphRight struct {
-	LoanDate   string `json:"loandate"`
-	LoanAmount string `json:"loanamt"`
-	LPCorp     string `json:"lpcorp"`
+	UniqueIndex string `json:"idx"`
+	LoanDate    string `json:"loandate"`
+	LoanAmount  string `json:"loanamt"`
+	LPCorp      string `json:"lpcorp"`
 }
 
 type macros struct {
