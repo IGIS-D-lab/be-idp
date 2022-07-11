@@ -123,6 +123,8 @@ func procDebtQry(v url.Values, d IDPDebt, forGraph int) (int, []debts, []debtsGr
 
 			case 1: // graph left
 				r := debtsGraphLeft{
+					UniqueIndex: row.UniqueIndex,
+					FundCode:    row.FundCode,
 					SetDateRate: row.SetDateRate,
 					AssetType:   row.AssetType,
 					AssetName:   row.AssetName,
@@ -134,9 +136,10 @@ func procDebtQry(v url.Values, d IDPDebt, forGraph int) (int, []debts, []debtsGr
 
 			case 2: // graph right
 				r := debtsGraphRight{
-					LoanDate:   row.LoanDate,
-					LoanAmount: row.LoanAmount,
-					LPCorp:     row.LPCorp,
+					UniqueIndex: row.UniqueIndex,
+					LoanDate:    row.LoanDate,
+					LoanAmount:  row.LoanAmount,
+					LPCorp:      row.LPCorp,
 				}
 				sendPacketG2 = append(sendPacketG2, r)
 				dataPoints += 1
