@@ -543,3 +543,20 @@ deployable main file. Macro New Data Post system
   - CMD ["/app/IGISBackEnd"]
 
 [Remove]
+
+
+# 0.4.4
+<p>
+Skip 0.4.3 to match docker deploy version. Model pred endpoint returns (low, high, base)
+</p>
+
+[Add]
+
+[Change]
+- ./apis
+  - QryModel.go
+    - func ServeModelCalc - gives []float64{bandLow, bandHigh, bandMidpoint(base)}
+
+[Fix]
+
+[Remove]

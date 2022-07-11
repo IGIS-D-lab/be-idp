@@ -171,27 +171,33 @@ func ServeModelCalc(model IDPModelCoef, band IDPModelInfo, macro IDPMacro, w htt
 		BankFix: []float64{
 			calcInterest(x, b, 19, 15) - bandMap[3],
 			calcInterest(x, b, 19, 15) + bandMap[3],
+			calcInterest(x, b, 19, 15),
 		},
 		InsFix: []float64{
 			calcInterest(x, b, 18, 15) - bandMap[1],
 			calcInterest(x, b, 18, 15) + bandMap[1],
+			calcInterest(x, b, 18, 15),
 		},
 		EtcFix: []float64{
 			calcInterest(x, b, 17, 15) - bandMap[5],
 			calcInterest(x, b, 17, 15) + bandMap[5],
+			calcInterest(x, b, 17, 15),
 		},
 
 		BankFloat: []float64{
 			calcInterest(x, b, 19, 16) - bandMap[4],
 			calcInterest(x, b, 19, 16) + bandMap[4],
+			calcInterest(x, b, 19, 16),
 		},
 		InsFloat: []float64{
 			calcInterest(x, b, 18, 16) - bandMap[2],
 			calcInterest(x, b, 18, 16) + bandMap[2],
+			calcInterest(x, b, 18, 16),
 		},
 		EtcFloat: []float64{
 			calcInterest(x, b, 17, 16) - bandMap[6],
 			calcInterest(x, b, 17, 16) + bandMap[6],
+			calcInterest(x, b, 17, 16),
 		},
 	}
 	packet, _ := json.Marshal(sendpacket)
