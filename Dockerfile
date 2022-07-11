@@ -8,8 +8,8 @@ RUN go mod download
 
 COPY . ./
 
-RUN go run main.go
+RUN go build
 
 EXPOSE 8080
 
-CMD [ "go", "run" ]
+CMD [ "/app/IGISBackEnd" ]

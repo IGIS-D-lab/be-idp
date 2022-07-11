@@ -87,12 +87,18 @@ func routeModel(rt *mux.Router, d apis.IDPDataSet) {
 		Name("model prediction")
 }
 
-func routeMacro(rt *mux.Router, d apis.IDPDataSet) {
+func routeMacro(rt *mux.Router, d apis.IDPDataSet, du *apis.IDPDataSet) {
 	rt.Path("/dataTable").
 		HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			apis.ServeMacro(d.Macro, w, r)
 		}).
 		Methods("GET").Name("macro data")
+	rt.Path("/update").
+		HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			apis.UpdateMacro(&du.Macro, w, r)
+		}).
+		Methods("POST").
+		Name("macro data update")
 }
 
 func main() {
@@ -119,12 +125,12 @@ func main() {
 
 	// api v1 subrouter - macro
 	sV1Macro := r.PathPrefix("/api/v1/macro").Subrouter()
-	routeMacro(sV1Macro, d)
+	routeMacro(sV1Macro, d, &d)
 
 	// serve
 	srv := &http.Server{
 		Handler:      r,
-		Addr:         "127.0.0.1:8080",
+		Addr:         "0.0.0.0:8080",
 		WriteTimeout: 15 * time.Second,
 		ReadTimeout:  15 * time.Second,
 	}

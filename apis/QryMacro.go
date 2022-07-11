@@ -2,6 +2,7 @@ package apis
 
 import (
 	"encoding/json"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"net/url"
@@ -12,14 +13,46 @@ import (
 	- serve dataTable aker
 */
 func ServeMacro(d IDPMacro, w http.ResponseWriter, r *http.Request) {
+	d, _ = mntMacro()
 	values := r.URL.Query()
-	log.Println(MSG_MODEL, values)
+	log.Println(MSG_MACRO, values)
 
 	dt := procMacroQuery(values, d)
 	packet, _ := json.Marshal(dt)
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-type", "application/json")
 	w.Write(packet)
+}
+
+func UpdateMacro(d *IDPMacro, w http.ResponseWriter, r *http.Request) {
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Println(MSG_MACRO, err)
+	}
+	// overwrite memory
+	err = procMacroUpdate(body, d)
+	if err != nil {
+		log.Println("macro overwrite error", err)
+	}
+	// file updated - reload file
+	upd, _ := json.Marshal(d)
+	err = ioutil.WriteFile("./asset/idpMacro4.json", upd, 0644)
+}
+
+func procMacroUpdate(newVal []byte, d *IDPMacro) error {
+	var newMacroRow newMacroPost
+	err := json.Unmarshal(newVal, &newMacroRow)
+	if err != nil {
+		return err
+	}
+	d.Data.KR1Y = append(d.Data.KR1Y, newMacroRow.KR1Y...)
+	d.Data.KR3Y = append(d.Data.KR3Y, newMacroRow.KR3Y...)
+	d.Data.KR5Y = append(d.Data.KR5Y, newMacroRow.KR5Y...)
+	d.Data.IFD1Y = append(d.Data.IFD1Y, newMacroRow.IFB1Y...)
+	d.Data.CD91D = append(d.Data.CD91D, newMacroRow.CD91D...)
+	d.Data.CP91D = append(d.Data.CP91D, newMacroRow.CP91D...)
+	d.Data.KORIBOR3M = append(d.Data.KORIBOR3M, newMacroRow.KORIBOR3M...)
+	return nil
 }
 
 func procMacroQuery(v url.Values, d IDPMacro) IDPMacro {

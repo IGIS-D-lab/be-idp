@@ -513,3 +513,33 @@ Fix band. Add Macro. Query macro by dateFrom and dateUntil
   - QryMacro.go
     - func serveMacroQry
     - func serveMacroWhole
+
+# 0.4.2
+<p>
+deployable main file. Macro New Data Post system
+</p>
+
+[Add]
+- README.md
+  - information regarding building docker
+- ./apis
+  - QryMacro.go
+    - func UpdateMacro
+    - func procMacroUpdate
+  - idpRespStrc.go
+    - struct newMacroPost
+- main.go
+  - func routeMacro - new endpoint /update
+
+[Change]
+- ./apis
+  - func ServeMacro - now read file on request
+
+[Fix]
+- main.go
+  - Hosting addr: 127.0.0.1:8080 -> 0.0.0.0:8080. Deployed version.
+- Dockerfile
+  - RUN go build
+  - CMD ["/app/IGISBackEnd"]
+
+[Remove]

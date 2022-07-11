@@ -91,7 +91,7 @@ func mntDebt() (IDPDebt, error) {
 }
 
 func mntMacro() (IDPMacro, error) {
-	file, err := os.Open("./asset/idpMacro3.json")
+	file, err := os.Open("./asset/idpMacro4.json")
 	if err != nil {
 		log.Println(DATA_ERR_MACRO, err)
 	} else {

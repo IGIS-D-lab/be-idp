@@ -2,8 +2,7 @@
 
 ```
 go mod init IGISBackEnd
-go get -u "github.com/gorilla/mux"
-go get -u "github.com/go-sql-driver/mysql"
+go mod tidy
 ```
 
 ## API version: Current: version 0
@@ -46,3 +45,16 @@ http://localhost:8080에서 실행. GitBook에서 API 요청 확인 가능.
 |model| Model Info | http://localhost:8080/api/v1/model/info |
 |model| Model Coefficient | http://localhost:8080/api/v1/model/coef |
 |model| Model Prediction | http://localhost:8080/api/v1/model/pred?seniorstr=%EC%84%A0&loancls=%EB%B8%8C%EB%A6%BF%EC%A7%80 |
+
+
+### Docker 정보
+<p>
+```bash
+$ docker build -t <username>/<servicename>:<version>
+$ docker build --platform amd64 -t <username>/<servicename>:<version>
+```
+
+Since API will be ran from AWS CentOS, --platform amd64 is required. (if not it'll be compiled on mac)
+
+- 2022.07.11 - tag 0.4.2 and 0.4.2amd64 image in repository.
+</p>
