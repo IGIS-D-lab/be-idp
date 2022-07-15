@@ -560,3 +560,21 @@ Skip 0.4.3 to match docker deploy version. Model pred endpoint returns (low, hig
 [Fix]
 
 [Remove]
+
+# 0.5.0 - Branch origin/0.5
+<p>
+Move macro data into redis-cloud instance
+</p>
+
+[Add]
+- ./orm
+  - dbaStruct.go
+
+[Change]
+
+[Fix]
+
+
+[Remove]
+- ./orm
+  - delete dbaQuery.go
