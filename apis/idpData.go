@@ -82,12 +82,7 @@ func mntDebt() (IDPDebt, error) {
 
 	var data IDPDebt
 	err = json.Unmarshal(byteVal, &data)
-	if err != nil {
-		log.Println(DATA_ERR_DEBT, err)
-		return data, err
-	} else {
-		return data, nil
-	}
+	return data, err
 }
 
 func mntMacro() (IDPMacro, error) {
