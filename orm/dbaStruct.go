@@ -64,6 +64,7 @@ func CreateDatabaseObject(keyAddr string) (*redis.Client, error) {
 }
 
 func RedisJSONGet(redisdb *redis.Client, key1, key2 string) *redis.StringCmd {
+	log.Printf("%v : %v JSON.GET from Redis Complete\n", key1, key2)
 	cmd := redis.NewStringCmd("JSON.GET", key1, key2)
 	redisdb.Process(cmd)
 	return cmd

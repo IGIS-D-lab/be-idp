@@ -6,14 +6,19 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+
+	"IGISBackEnd/orm"
+	_ "IGISBackEnd/orm"
+
+	"github.com/go-redis/redis"
 )
 
 /*
 	ServeMacro
 	- serve dataTable aker
 */
-func ServeMacro(d IDPMacro, w http.ResponseWriter, r *http.Request) {
-	d, _ = mntMacro()
+func ServeMacro(database *redis.Client, w http.ResponseWriter, r *http.Request) {
+	d := mntMacroRedis(database)
 	values := r.URL.Query()
 	log.Println(MSG_MACRO, values)
 
@@ -24,7 +29,7 @@ func ServeMacro(d IDPMacro, w http.ResponseWriter, r *http.Request) {
 	w.Write(packet)
 }
 
-func UpdateMacro(d *IDPMacro, w http.ResponseWriter, r *http.Request) {
+func UpdateMacro(d *IDPMacro, database *redis.Client, w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		log.Println(MSG_MACRO, err)
@@ -36,7 +41,14 @@ func UpdateMacro(d *IDPMacro, w http.ResponseWriter, r *http.Request) {
 	}
 	// file updated - reload file
 	upd, _ := json.Marshal(d)
+	// on memory
 	err = ioutil.WriteFile("./asset/idpMacro4.json", upd, 0644)
+	// on database
+	v, err := orm.RedisJSONSet(database, "macro_asset:1", "$", string(upd)).Result()
+	if err != nil {
+		log.Println(err)
+	}
+	log.Print("update complete", v)
 }
 
 func procMacroUpdate(newVal []byte, d *IDPMacro) error {

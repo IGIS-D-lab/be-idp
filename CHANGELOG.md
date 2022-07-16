@@ -569,8 +569,20 @@ Move macro data into redis-cloud instance
 [Add]
 - ./orm
   - dbaStruct.go
+    - func processKey
+    - func CreateDatabaseObject
+    - func RedisJSONGet
+    - func RedisJSONSet
 
 [Change]
+- ./apis
+  - QryMacro.go
+    - func ServeMacro - now gets data from `func mntMacroRedis` which queries from redis cloud
+    - func UpdateMacro - now supports updating database cloud using `func RedisJSONSet`
+  - idpData.go
+    - func parseResult - parse raw string result by Redis
+    - func mntMacroRedis - queries and gets data from RedisCloud
+  - main.go - change accordingly.
 
 [Fix]
 

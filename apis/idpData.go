@@ -1,11 +1,14 @@
 package apis
 
 import (
+	"IGISBackEnd/orm"
 	"bytes"
 	"encoding/json"
 	"io/ioutil"
 	"log"
 	"os"
+
+	"github.com/go-redis/redis"
 )
 
 /*
@@ -103,6 +106,36 @@ func mntMacro() (IDPMacro, error) {
 		return data, err
 	} else {
 		return data, nil
+	}
+
+}
+
+func parseResult(redisJson string) []macroRow {
+	var redisRows [][]macroRow
+	byteVal := []byte(redisJson)
+	_ = json.Unmarshal(byteVal, &redisRows)
+	return redisRows[0]
+}
+
+func mntMacroRedis(db *redis.Client) IDPMacro {
+	kr1y, _ := orm.RedisJSONGet(db, "macro_asset:1", "$.data.kr1y").Result()
+	kr3y, _ := orm.RedisJSONGet(db, "macro_asset:1", "$.data.kr3y").Result()
+	kr5y, _ := orm.RedisJSONGet(db, "macro_asset:1", "$.data.kr5y").Result()
+	ifd1y, _ := orm.RedisJSONGet(db, "macro_asset:1", "$.data.ifd1y").Result()
+	cd91d, _ := orm.RedisJSONGet(db, "macro_asset:1", "$.data.cd91d").Result()
+	cp91d, _ := orm.RedisJSONGet(db, "macro_asset:1", "$.data.cp91d").Result()
+	koribor3m, _ := orm.RedisJSONGet(db, "macro_asset:1", "$.data.koribor3m").Result()
+
+	return IDPMacro{
+		Data: macros{
+			KR1Y:      parseResult(kr1y),
+			KR3Y:      parseResult(kr3y),
+			KR5Y:      parseResult(kr5y),
+			IFD1Y:     parseResult(ifd1y),
+			CD91D:     parseResult(cd91d),
+			CP91D:     parseResult(cp91d),
+			KORIBOR3M: parseResult(koribor3m),
+		},
 	}
 
 }
