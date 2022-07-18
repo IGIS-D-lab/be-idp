@@ -106,7 +106,7 @@ func routeMacro(rt *mux.Router, db *redis.Client, d apis.IDPDataSet, du *apis.ID
 func main() {
 	// _, _ = logs.LogInit()
 	r := mux.NewRouter()
-	database, err := orm.CreateDatabaseObject("./token.json")
+	database, err := orm.Conn("./token.json")
 	if err != nil {
 		log.Panicln(err)
 	}

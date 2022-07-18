@@ -590,3 +590,30 @@ Move macro data into redis-cloud instance
 [Remove]
 - ./orm
   - delete dbaQuery.go
+
+# 0.5.0 - Branch origin/0.5
+<p>
+Use go generics to simplify codes
+</p>
+
+[Add]
+- ./orm
+  - ormConn.go
+    - func processKey
+    - func Conn
+    - func DataBaseConfig
+  - ormReJson.go
+    - use go generics to get arbitrary types of container and parse it into Database. 
+    - func JSONGet[T any]
+    - func JSONSet[T any]
+
+[Change]
+- ./apis
+  - idpData.go
+    - func mntMacroRedis - use orm.JSONGet to simplify things.
+
+[Fix]
+
+[Remove]
+- ./orm
+  - dbaStruct.go - removed due to go generics function

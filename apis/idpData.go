@@ -110,31 +110,22 @@ func mntMacro() (IDPMacro, error) {
 
 }
 
-func parseResult(redisJson string) []macroRow {
-	var redisRows [][]macroRow
-	byteVal := []byte(redisJson)
-	_ = json.Unmarshal(byteVal, &redisRows)
-	return redisRows[0]
-}
-
 func mntMacroRedis(db *redis.Client) IDPMacro {
-	kr1y, _ := orm.RedisJSONGet(db, "macro_asset:1", "$.data.kr1y").Result()
-	kr3y, _ := orm.RedisJSONGet(db, "macro_asset:1", "$.data.kr3y").Result()
-	kr5y, _ := orm.RedisJSONGet(db, "macro_asset:1", "$.data.kr5y").Result()
-	ifd1y, _ := orm.RedisJSONGet(db, "macro_asset:1", "$.data.ifd1y").Result()
-	cd91d, _ := orm.RedisJSONGet(db, "macro_asset:1", "$.data.cd91d").Result()
-	cp91d, _ := orm.RedisJSONGet(db, "macro_asset:1", "$.data.cp91d").Result()
-	koribor3m, _ := orm.RedisJSONGet(db, "macro_asset:1", "$.data.koribor3m").Result()
+	var rContain []macros
 
+	data, err := orm.JSONGet[[]macros](db, "macro_asset:1", "$.data", &rContain)
+	if err != nil {
+		return IDPMacro{}
+	}
 	return IDPMacro{
 		Data: macros{
-			KR1Y:      parseResult(kr1y),
-			KR3Y:      parseResult(kr3y),
-			KR5Y:      parseResult(kr5y),
-			IFD1Y:     parseResult(ifd1y),
-			CD91D:     parseResult(cd91d),
-			CP91D:     parseResult(cp91d),
-			KORIBOR3M: parseResult(koribor3m),
+			KR1Y:      data[0].KR1Y,
+			KR3Y:      data[0].KR3Y,
+			KR5Y:      data[0].KR5Y,
+			IFD1Y:     data[0].IFD1Y,
+			CD91D:     data[0].CD91D,
+			CP91D:     data[0].CP91D,
+			KORIBOR3M: data[0].KORIBOR3M,
 		},
 	}
 

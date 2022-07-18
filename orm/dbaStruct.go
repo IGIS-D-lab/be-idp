@@ -1,11 +1,7 @@
 package orm
 
 import (
-	"encoding/json"
-	"fmt"
-	"io/ioutil"
 	"log"
-	"os"
 
 	"github.com/go-redis/redis"
 )
@@ -26,42 +22,6 @@ import (
 	  - might as well do it as a rolling window while we update it.
 	3. The original JSON file will still hold the information.
 */
-
-type DataBaseConfig struct {
-	Address  string `json:"db"`
-	Password string `json:"pw"`
-}
-
-func processKey(keyAddr string) (DataBaseConfig, error) {
-	file, err := os.Open(keyAddr)
-	if err != nil {
-		log.Println("No Config file")
-	}
-	byteVal, _ := ioutil.ReadAll(file)
-	var c DataBaseConfig
-	err = json.Unmarshal(byteVal, &c)
-	return c, err
-}
-
-func CreateDatabaseObject(keyAddr string) (*redis.Client, error) {
-	loginInfo, err := processKey(keyAddr)
-	if err != nil {
-		log.Println("Login fail")
-	}
-	client := redis.NewClient(&redis.Options{
-		Addr:     loginInfo.Address,
-		Password: loginInfo.Password,
-		DB:       0, // use default db
-	})
-
-	// test if the client is responding
-	pong, err := client.Ping().Result()
-	if err != nil {
-		return nil, err
-	}
-	fmt.Println(pong, "connection successful")
-	return client, nil
-}
 
 func RedisJSONGet(redisdb *redis.Client, key1, key2 string) *redis.StringCmd {
 	log.Printf("%v : %v JSON.GET from Redis Complete\n", key1, key2)
