@@ -591,7 +591,7 @@ Move macro data into redis-cloud instance
 - ./orm
   - delete dbaQuery.go
 
-# 0.5.0 - Branch origin/0.5
+# 0.5.1 - Branch origin/0.5
 <p>
 Use go generics to simplify codes
 </p>
