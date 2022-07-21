@@ -560,3 +560,60 @@ Skip 0.4.3 to match docker deploy version. Model pred endpoint returns (low, hig
 [Fix]
 
 [Remove]
+
+# 0.5.0 - Branch origin/0.5
+<p>
+Move macro data into redis-cloud instance
+</p>
+
+[Add]
+- ./orm
+  - dbaStruct.go
+    - func processKey
+    - func CreateDatabaseObject
+    - func RedisJSONGet
+    - func RedisJSONSet
+
+[Change]
+- ./apis
+  - QryMacro.go
+    - func ServeMacro - now gets data from `func mntMacroRedis` which queries from redis cloud
+    - func UpdateMacro - now supports updating database cloud using `func RedisJSONSet`
+  - idpData.go
+    - func parseResult - parse raw string result by Redis
+    - func mntMacroRedis - queries and gets data from RedisCloud
+  - main.go - change accordingly.
+
+[Fix]
+
+
+[Remove]
+- ./orm
+  - delete dbaQuery.go
+
+# 0.5.1 - Branch origin/0.5
+<p>
+Use go generics to simplify codes
+</p>
+
+[Add]
+- ./orm
+  - ormConn.go
+    - func processKey
+    - func Conn
+    - func DataBaseConfig
+  - ormReJson.go
+    - use go generics to get arbitrary types of container and parse it into Database. 
+    - func JSONGet[T any]
+    - func JSONSet[T any]
+
+[Change]
+- ./apis
+  - idpData.go
+    - func mntMacroRedis - use orm.JSONGet to simplify things.
+
+[Fix]
+
+[Remove]
+- ./orm
+  - dbaStruct.go - removed due to go generics function

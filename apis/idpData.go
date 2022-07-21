@@ -1,11 +1,14 @@
 package apis
 
 import (
+	"IGISBackEnd/orm"
 	"bytes"
 	"encoding/json"
 	"io/ioutil"
 	"log"
 	"os"
+
+	"github.com/go-redis/redis"
 )
 
 /*
@@ -103,6 +106,27 @@ func mntMacro() (IDPMacro, error) {
 		return data, err
 	} else {
 		return data, nil
+	}
+
+}
+
+func mntMacroRedis(db *redis.Client) IDPMacro {
+	var rContain []macros
+
+	data, err := orm.JSONGet[[]macros](db, "macro_asset:1", "$.data", &rContain)
+	if err != nil {
+		return IDPMacro{}
+	}
+	return IDPMacro{
+		Data: macros{
+			KR1Y:      data[0].KR1Y,
+			KR3Y:      data[0].KR3Y,
+			KR5Y:      data[0].KR5Y,
+			IFD1Y:     data[0].IFD1Y,
+			CD91D:     data[0].CD91D,
+			CP91D:     data[0].CP91D,
+			KORIBOR3M: data[0].KORIBOR3M,
+		},
 	}
 
 }

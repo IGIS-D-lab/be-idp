@@ -2,12 +2,14 @@ package main
 
 import (
 	"IGISBackEnd/apis"
+	"IGISBackEnd/orm"
 	"fmt"
 
 	"log"
 	"net/http"
 	"time"
 
+	"github.com/go-redis/redis"
 	"github.com/gorilla/mux"
 )
 
@@ -87,15 +89,15 @@ func routeModel(rt *mux.Router, d apis.IDPDataSet) {
 		Name("model prediction")
 }
 
-func routeMacro(rt *mux.Router, d apis.IDPDataSet, du *apis.IDPDataSet) {
+func routeMacro(rt *mux.Router, db *redis.Client, d apis.IDPDataSet, du *apis.IDPDataSet) {
 	rt.Path("/dataTable").
 		HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			apis.ServeMacro(d.Macro, w, r)
+			apis.ServeMacro(db, w, r)
 		}).
 		Methods("GET").Name("macro data")
 	rt.Path("/update").
 		HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			apis.UpdateMacro(&du.Macro, w, r)
+			apis.UpdateMacro(&du.Macro, db, w, r)
 		}).
 		Methods("POST").
 		Name("macro data update")
@@ -104,6 +106,10 @@ func routeMacro(rt *mux.Router, d apis.IDPDataSet, du *apis.IDPDataSet) {
 func main() {
 	// _, _ = logs.LogInit()
 	r := mux.NewRouter()
+	database, err := orm.Conn("./token.json")
+	if err != nil {
+		log.Panicln(err)
+	}
 
 	// Pre-load data
 	d := apis.MntData()
@@ -125,7 +131,7 @@ func main() {
 
 	// api v1 subrouter - macro
 	sV1Macro := r.PathPrefix("/api/v1/macro").Subrouter()
-	routeMacro(sV1Macro, d, &d)
+	routeMacro(sV1Macro, database, d, &d)
 
 	// serve
 	srv := &http.Server{
