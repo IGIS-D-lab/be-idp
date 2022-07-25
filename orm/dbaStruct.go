@@ -1,42 +1,37 @@
 package orm
 
 import (
-	"database/sql"
-	"fmt"
 	"log"
 
-	_ "github.com/go-sql-driver/mysql"
+	"github.com/go-redis/redis"
 )
 
-type DataBaseObject struct {
-	Username string
-	Password string
-	DB       sql.DB
+/*
+	For now the database will be updated like so
+
+	1. if post command is inputed ->
+	2. Get redis dataset with RedisJSONGet
+	3. append redis dataset with new information
+	4. delete the oldest information from the dataset (rolling window)
+	5. change the whole JSON data with RedisJSONSet
+
+	It is really inefficient, but it'll do.
+	We use this method because
+	1. we might run out of memory because it's a free tier
+	2. JSON data cannot be appended. JSON data must be updated.
+	  - might as well do it as a rolling window while we update it.
+	3. The original JSON file will still hold the information.
+*/
+
+func RedisJSONGet(redisdb *redis.Client, key1, key2 string) *redis.StringCmd {
+	log.Printf("%v : %v JSON.GET from Redis Complete\n", key1, key2)
+	cmd := redis.NewStringCmd("JSON.GET", key1, key2)
+	redisdb.Process(cmd)
+	return cmd
 }
 
-func CreateDatabaseObject() {
-	var dao = DataBaseObject{
-		Username: "root",
-		Password: "hb80M!ZYHz",
-	}
-	s, err := dao.SqlLogin("127.0.0.1", "LOCALTEST")
-	if err != nil {
-		fmt.Println("sql error", err)
-	}
-	fmt.Println(s)
-
-	db, err := sql.Open("mysql", s)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
-
-	// // SQL Queries resulting in multiple Row
-	// var (
-	// 	id int
-	// 	name string
-	// )
-	// rows, err := db.Query("SELECT id, name FROM test1 where id >= ?", 1)
-
-	// SQL Queries resulting in single Row
+func RedisJSONSet(redisdb *redis.Client, key1, key2, value string) *redis.StringCmd {
+	cmd := redis.NewStringCmd("JSON.SET", key1, key2, value)
+	redisdb.Process(cmd)
+	return cmd
 }
