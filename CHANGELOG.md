@@ -617,3 +617,39 @@ Use go generics to simplify codes
 [Remove]
 - ./orm
   - dbaStruct.go - removed due to go generics function
+
+
+# 0.6.2 - Branch 1.0/pre
+<p>
+Prepare for v2 macro data. Add Foreign
+</p>
+
+[Add]
+- ./v2
+  - c_macro.go
+    - struct IDPMacro
+    - struct macros
+    - struct newMacroPost
+    - macroRows - plr of macroRow
+    - macroRow
+  - qry_macro.go
+    - func GetMacro
+    - func PostMacro
+    - func addNewDomestic
+    - func addNewForeign
+    - IDPMacro method search
+    - macroRows method searchDate
+- ./orm
+  - ormReJson.go
+    - func JSONArrAppend
+- main.go
+  - func routeMacro2
+    - "soon to be replacing routeMacro"
+    - Updating will be changed to routeMacro2
+
+[Change]
+- ./apis
+  - idpRespStrc.go
+    - struct newMacroPost - add Feds to fields.
+  - idpData.go
+    - func mntMacroRedis - add Feds to return values

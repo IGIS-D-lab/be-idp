@@ -126,6 +126,7 @@ func mntMacroRedis(db *redis.Client) IDPMacro {
 			CD91D:     data[0].CD91D,
 			CP91D:     data[0].CP91D,
 			KORIBOR3M: data[0].KORIBOR3M,
+			Feds:      data[0].Feds,
 		},
 	}
 

@@ -169,6 +169,7 @@ type macros struct {
 	CD91D     []macroRow `json:"cd91d"`
 	CP91D     []macroRow `json:"cp91d"`
 	KORIBOR3M []macroRow `json:"koribor3m"`
+	Feds      []macroRow `json:"ffr"`
 }
 
 type newMacroPost struct {

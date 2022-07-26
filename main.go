@@ -3,6 +3,7 @@ package main
 import (
 	"IGISBackEnd/apis"
 	"IGISBackEnd/orm"
+	v2 "IGISBackEnd/v2"
 	"fmt"
 
 	"log"
@@ -103,6 +104,26 @@ func routeMacro(rt *mux.Router, db *redis.Client, d apis.IDPDataSet, du *apis.ID
 		Name("macro data update")
 }
 
+func routeMacro2(rt *mux.Router, rdb *redis.Client) {
+	// data table
+	rt.Path("/dataTable").
+		HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			v2.GetMacro(rdb, w, r)
+		}).
+		Methods("GET").
+		Name("macro data")
+	rt.Path("/domUpdate").
+		HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			v2.PostMacro(rdb, true, w, r)
+		}).
+		Methods("POST").
+		Name("macro data update")
+	rt.Path("/forUpdate").
+		HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			v2.PostMacro(rdb, false, w, r)
+		})
+}
+
 func main() {
 	// _, _ = logs.LogInit()
 	r := mux.NewRouter()
@@ -132,6 +153,9 @@ func main() {
 	// api v1 subrouter - macro
 	sV1Macro := r.PathPrefix("/api/v1/macro").Subrouter()
 	routeMacro(sV1Macro, database, d, &d)
+
+	sV2Macro := r.PathPrefix("/api/v2/macro").Subrouter()
+	routeMacro2(sV2Macro, database)
 
 	// serve
 	srv := &http.Server{

@@ -32,12 +32,23 @@ func JSONGet[T any](database *redis.Client, key1, key2 string, container *T) (T,
 	- T: go generics
 	- gets any type of constraint -> and parse it into string
 */
-func JSONSet[T any](database *redis.Client, key1, key2 string, container *T) (string, error) {
+func JSONSet[T any](database *redis.Client, key1, key2 string, container *T) error {
 	setVal, _ := json.Marshal(container)
 
-	log.Printf("JSON SET : %v:: %v Setting", key1, key2)
+	log.Printf("JSON SET : %v:: %v Setting\n", key1, key2)
 	cmd := redis.NewStringCmd("JSON.SET", key1, key2, string(setVal))
 	_ = database.Process(cmd)
-	result, err := cmd.Result()
-	return result, err
+	err := cmd.Err()
+	return err
+}
+
+func JSONArrAppend[T any](database *redis.Client, key, path string, container *T) error {
+	setVal, _ := json.Marshal(container)
+
+	log.Printf("JSON ARRAPPEND : %v:: %v Setting\n", key, path)
+	cmd := redis.NewStringCmd("JSON.ARRAPPEND", key, path, string(setVal))
+
+	_ = database.Process(cmd)
+	err := cmd.Err()
+	return err
 }

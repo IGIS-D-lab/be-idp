@@ -8,7 +8,6 @@ import (
 	"net/url"
 
 	"IGISBackEnd/orm"
-	_ "IGISBackEnd/orm"
 
 	"github.com/go-redis/redis"
 )
@@ -44,11 +43,11 @@ func UpdateMacro(d *IDPMacro, database *redis.Client, w http.ResponseWriter, r *
 	// on memory
 	err = ioutil.WriteFile("./asset/idpMacro4.json", upd, 0644)
 	// on database
-	v, err := orm.RedisJSONSet(database, "macro_asset:1", "$", string(upd)).Result()
+	err = orm.JSONSet[IDPMacro](database, "macro_asset:1", "$", d)
 	if err != nil {
 		log.Println(err)
 	}
-	log.Print("update complete", v)
+	log.Print("update complete")
 }
 
 func procMacroUpdate(newVal []byte, d *IDPMacro) error {
@@ -89,6 +88,7 @@ func procMacroQuery(v url.Values, d IDPMacro) IDPMacro {
 			CD91D:     procByAsset(d.Data.CD91D, dateFrom, dateUntil),
 			CP91D:     procByAsset(d.Data.CP91D, dateFrom, dateUntil),
 			KORIBOR3M: procByAsset(d.Data.KORIBOR3M, dateFrom, dateUntil),
+			Feds:      procByAsset(d.Data.Feds, dateFrom, dateUntil),
 		},
 	}
 	return sendPacket
