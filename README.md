@@ -46,6 +46,13 @@ http://localhost:8080에서 실행. GitBook에서 API 요청 확인 가능.
 |model| Model Coefficient | http://localhost:8080/api/v1/model/coef |
 |model| Model Prediction | http://localhost:8080/api/v1/model/pred?seniorstr=%EC%84%A0&loancls=%EB%B8%8C%EB%A6%BF%EC%A7%80 |
 
+<p>
+v2 API
+</p>
+
+|Subroute| Content | Testing URL |
+|-|--|--|
+|macro| Macro Query | http://localhost:8080/api/v2/macro/dataTable?dateFrom=20220101&dateUntil=20220801 |
 
 ### Docker 정보
 <p>
