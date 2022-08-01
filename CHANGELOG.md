@@ -653,3 +653,39 @@ Prepare for v2 macro data. Add Foreign
     - struct newMacroPost - add Feds to fields.
   - idpData.go
     - func mntMacroRedis - add Feds to return values
+
+# 0.6.3 - Branch 1.0/pre
+<p>
+Add board api endpoint with subroute /message, endpoint /message and /newMessage. + Add financial bond info from shinhan bank
+</p>
+
+[Add]
+- ./v2
+  - c_chat.go
+    - struct Message
+    - struct MessageOk
+    - and constants
+  - qry_chat.go
+    - two main functions
+      - func GetMessage
+      - func PostMessage
+    - utility functions
+      - func checkPacket
+      - func getMsgBlock
+
+- main.go
+  - func routeMsg - new endpoint route /message and /newMessage
+
+[Change]
+- ./v2
+  - qry_macro.go
+    - func addNewDomestic - add FB6M FB1Y, and FB3Y
+    - method search - add FB6M, FB1Y, and FB3Y
+  - c_macro.go
+    - struct macros - FB6M, FB1Y, FB3Y
+
+
+[Fix]
+
+
+[Remove]

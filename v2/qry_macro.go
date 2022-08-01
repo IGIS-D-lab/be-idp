@@ -53,6 +53,9 @@ func addNewDomestic(rdb *redis.Client, n newMacroPost) {
 	orm.JSONArrAppend[macroRow](rdb, key, "$.data.cd91d", &n.CD91D[0])
 	orm.JSONArrAppend[macroRow](rdb, key, "$.data.cp91d", &n.CP91D[0])
 	orm.JSONArrAppend[macroRow](rdb, key, "$.data.koribor3m", &n.KORIBOR3M[0])
+	orm.JSONArrAppend[macroRow](rdb, key, "$.data.fb6m", &n.FB6M[0])
+	orm.JSONArrAppend[macroRow](rdb, key, "$.data.fb1y", &n.FB1Y[0])
+	orm.JSONArrAppend[macroRow](rdb, key, "$.data.fb3y", &n.FB3Y[0])
 }
 
 func addNewForeign(rdb *redis.Client, n newMacroPost) {
@@ -83,6 +86,9 @@ func (d IDPMacro) search(v url.Values) IDPMacro {
 			CP91D:     d.Data.CP91D.searchDate(dateFrom, dateUntil),
 			KORIBOR3M: d.Data.KORIBOR3M.searchDate(dateFrom, dateUntil),
 			Feds:      d.Data.Feds.searchDate(dateFrom, dateUntil),
+			FB6M:      d.Data.FB6M.searchDate(dateFrom, dateUntil),
+			FB1Y:      d.Data.FB1Y.searchDate(dateFrom, dateUntil),
+			FB3Y:      d.Data.FB3Y.searchDate(dateFrom, dateUntil),
 		},
 	}
 	return sendPacket

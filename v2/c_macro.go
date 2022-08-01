@@ -14,6 +14,9 @@ type macros struct {
 	IFD1Y     macroRows `json:"ifd1y"`
 	CD91D     macroRows `json:"cd91d"`
 	CP91D     macroRows `json:"cp91d"`
+	FB6M      macroRows `json:"fb6m"`
+	FB1Y      macroRows `json:"fb1y"`
+	FB3Y      macroRows `json:"fb3y"`
 	KORIBOR3M macroRows `json:"koribor3m"`
 	Feds      macroRows `json:"ffr"`
 }

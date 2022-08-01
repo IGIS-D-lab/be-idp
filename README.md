@@ -53,6 +53,8 @@ v2 API
 |Subroute| Content | Testing URL |
 |-|--|--|
 |macro| Macro Query | http://localhost:8080/api/v2/macro/dataTable?dateFrom=20220101&dateUntil=20220801 |
+| chat | Get Board Query | http://localhost:8080/api/v2/message/message?msgNum=0 |
+|chat | Post Board Query | http://localhost:8080/api/v2/message/newMessage?msgNum=0&username=test_user2&password=00a00&content=testing2 |
 
 ### Docker 정보
 <p>

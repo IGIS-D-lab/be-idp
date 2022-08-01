@@ -124,6 +124,21 @@ func routeMacro2(rt *mux.Router, rdb *redis.Client) {
 		})
 }
 
+func routeMsg(rt *mux.Router, rdb *redis.Client) {
+	rt.Path("/message").
+		HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			v2.GetMessage(rdb, w, r)
+		}).
+		Methods("GET").
+		Name("get message")
+	rt.Path("/newMessage").
+		HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			v2.PostMessage(rdb, w, r)
+		}).
+		Methods("POST").
+		Name("post new message")
+}
+
 func main() {
 	// _, _ = logs.LogInit()
 	r := mux.NewRouter()
@@ -156,6 +171,10 @@ func main() {
 
 	sV2Macro := r.PathPrefix("/api/v2/macro").Subrouter()
 	routeMacro2(sV2Macro, database)
+
+	// api v2 subrouter - message
+	sV2Message := r.PathPrefix("/api/v2/message").Subrouter()
+	routeMsg(sV2Message, database)
 
 	// serve
 	srv := &http.Server{
