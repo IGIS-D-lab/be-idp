@@ -2,8 +2,11 @@ package apis
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/url"
+
+	"github.com/go-redis/redis"
 )
 
 /*
@@ -65,6 +68,7 @@ func genDataPointMap(mac IDPMacro) map[int]float64 {
 	result[4] = findRecentMacro(mac.Data.CD91D).Value
 	result[5] = findRecentMacro(mac.Data.CP91D).Value
 	result[6] = findRecentMacro(mac.Data.KORIBOR3M).Value
+	fmt.Println("most recent", findRecentMacro(mac.Data.KORIBOR3M))
 	return result
 }
 
@@ -149,8 +153,9 @@ func parseModelInfo(band IDPModelInfo) map[int]float64 {
 	- liquidity provider in Bank, Insurance(Ins), Etc
 	- rate in Fix, Float
 */
-func ServeModelCalc(model IDPModelCoef, band IDPModelInfo, macro IDPMacro, w http.ResponseWriter, r *http.Request) {
+func ServeModelCalc(db *redis.Client, model IDPModelCoef, band IDPModelInfo, macro IDPMacro, w http.ResponseWriter, r *http.Request) {
 	values := r.URL.Query()
+	macro = mntMacroRedis(db)
 
 	// set x
 	// x: categorical data

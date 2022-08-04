@@ -689,3 +689,22 @@ Add board api endpoint with subroute /message, endpoint /message and /newMessage
 
 
 [Remove]
+
+
+# 0.6.4 - Branch 1.0/pre
+<p>
+bug fix - stuck front prediction table
+</p>
+
+[Add]
+
+
+[Change]
+
+
+[Fix]
+- bugfix - front prediction value stuck. - it was reading from old macro json file.
+- add database to servemodelcalc in QryModel.go
+
+
+[Remove]

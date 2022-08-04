@@ -66,7 +66,7 @@ func routeDebt(rt *mux.Router, d apis.IDPDataSet) {
 		Name("debt.graphRight")
 }
 
-func routeModel(rt *mux.Router, d apis.IDPDataSet) {
+func routeModel(rt *mux.Router, db *redis.Client, d apis.IDPDataSet) {
 	// model info sub-endpoint
 	rt.Path("/info").
 		HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -84,7 +84,7 @@ func routeModel(rt *mux.Router, d apis.IDPDataSet) {
 	// model prediction sub-endpoint
 	rt.Path("/pred").
 		HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			apis.ServeModelCalc(d.ModelCoef, d.ModelInfo, d.Macro, w, r)
+			apis.ServeModelCalc(db, d.ModelCoef, d.ModelInfo, d.Macro, w, r)
 		}).
 		Methods("GET").
 		Name("model prediction")
@@ -163,7 +163,7 @@ func main() {
 
 	// api v1 subrouter - model
 	sV1Model := r.PathPrefix("/api/v1/model").Subrouter()
-	routeModel(sV1Model, d)
+	routeModel(sV1Model, database, d)
 
 	// api v1 subrouter - macro
 	sV1Macro := r.PathPrefix("/api/v1/macro").Subrouter()
